@@ -88,10 +88,12 @@ WriteFlow is available on the Google Play Store. Simply search for "WriteFlow" o
 
 *[Add Google Play Store link here]*
 
-## Privacy Policy
-
-*[Add link to your privacy policy]*
-
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For technical support or feature requests, please contact:
+*[noureddinne.office@gmail.com]*
+
