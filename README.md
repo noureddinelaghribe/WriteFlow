@@ -56,6 +56,7 @@ Customize your writing with different modes:
 - **User Authentication:** Secure login and sign-up through Firebase
 - **Advanced AI Integration:** Powered by ChatGPT and DeepSeek APIs
 - **Premium Subscription:** In-app purchases and Google Play subscription options
+- **Monetization: Unity ads integration for free version
 
 ## Technologies Used
 
@@ -65,6 +66,7 @@ Customize your writing with different modes:
 - **Room Database:** Local storage for writing history
 - **API Integration:** ChatGPT and DeepSeek for AI capabilities
 - **Google Play Billing:** For subscription and in-app purchase management
+- **Unity Ads: Integrated advertising solution
 
 ## Architecture
 
