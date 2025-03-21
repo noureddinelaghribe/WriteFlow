@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "982182261941",
+    "firebase_url": "https://writeflow-194d0-default-rtdb.firebaseio.com",
+    "project_id": "writeflow-194d0",
+    "storage_bucket": "writeflow-194d0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982182261941:android:c3bd99b6ce3a8d1bb03afc",
+        "android_client_info": {
+          "package_name": "com.noureddine.WriteFlow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "982182261941-nnr0u8cmv98jlqpd7vdrgfkna5tl9vq6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noureddine.WriteFlow",
+            "certificate_hash": "08c3e39bb4994b031e5c15b501f385780ec11252"
+          }
+        },
+        {
+          "client_id": "982182261941-bss2lhvr689v1ivkhjv8jdem9ckd9c2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxYnErkVoD-unFAlYv4YKVoa45v5UJf54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "982182261941-bss2lhvr689v1ivkhjv8jdem9ckd9c2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

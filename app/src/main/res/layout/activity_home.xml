@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".activities.HomeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/logo" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WriteFlow"
+                android:textColor="@color/c4"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viwepager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:clickable="true"
+                app:tabIndicatorHeight="0dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/c6"
+                app:tabTextColor="@color/c4">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/home_selected"
+                    android:text="Home" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_subscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/crown_unselected"
+                    android:text="Premium" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_settimg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/settings_unselected"
+                    android:text="Setting" />
+
+            </com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="vertical">-->
+
+        <!--            <androidx.cardview.widget.CardView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginLeft="20dp"-->
+        <!--                android:layout_marginRight="20dp"-->
+        <!--                app:cardCornerRadius="8dp"-->
+        <!--                app:cardElevation="3dp">-->
+
+        <!--                <LinearLayout-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:background="@color/c5"-->
+        <!--                    android:gravity="right"-->
+        <!--                    android:orientation="vertical">-->
+
+        <!--                    <LinearLayout-->
+        <!--                        android:layout_width="match_parent"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_weight="1"-->
+        <!--                        android:gravity="center_vertical"-->
+        <!--                        android:orientation="horizontal">-->
+
+        <!--                        <ImageView-->
+        <!--                            android:id="@+id/imageView3"-->
+        <!--                            android:layout_width="60dp"-->
+        <!--                            android:layout_height="60dp"-->
+        <!--                            android:layout_marginLeft="10dp"-->
+        <!--                            android:src="@drawable/crown" />-->
+
+        <!--                        <TextView-->
+        <!--                            android:id="@+id/textView3"-->
+        <!--                            android:layout_width="wrap_content"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:layout_margin="5dp"-->
+        <!--                            android:text="Upgrade your Pruemium Plan"-->
+        <!--                            android:textColor="@color/c4"-->
+        <!--                            android:textSize="16sp"-->
+        <!--                            android:textStyle="bold" />-->
+        <!--                    </LinearLayout>-->
+
+        <!--                    <TextView-->
+        <!--                        android:id="@+id/textView2"-->
+        <!--                        android:layout_width="match_parent"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_marginLeft="10dp"-->
+        <!--                        android:layout_marginRight="10dp"-->
+        <!--                        android:layout_weight="1"-->
+        <!--                        android:text="Mack Your ideas, better writing We use AI to strengthen writing and boost productivity—without sacrificing authenticity." />-->
+
+        <!--                    <Button-->
+        <!--                        android:id="@+id/button"-->
+        <!--                        android:layout_width="150dp"-->
+        <!--                        android:layout_height="wrap_content"-->
+        <!--                        android:layout_margin="10dp"-->
+        <!--                        android:background="@drawable/bg_button_upgrade"-->
+        <!--                        android:text="Upgrade"-->
+        <!--                        android:textAllCaps="false"-->
+        <!--                        android:textColor="@color/c2"-->
+        <!--                        android:textSize="14sp" />-->
+
+        <!--                </LinearLayout>-->
+
+        <!--            </androidx.cardview.widget.CardView>-->
+        <!--        </LinearLayout>-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/textView5"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="10dp"-->
+        <!--            android:text="Streamline Your Workflow: Seven Tools, One Ultimate Hub."-->
+        <!--            android:textColor="@color/c4"-->
+        <!--            android:textStyle="bold" />-->
+
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:id="@+id/recyclerView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            tools:itemCount="7"-->
+        <!--            tools:listitem="@layout/item" />-->
+
+    </LinearLayout>
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="horizontal">-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:gravity="center"-->
+    <!--            android:padding="5dp"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/imageView2"-->
+    <!--                android:layout_width="25dp"-->
+    <!--                android:layout_height="25dp"-->
+    <!--                android:src="@drawable/home_selected" />-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textView6"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:textColor="@color/c6"-->
+    <!--                android:text="Home" />-->
+    <!--        </LinearLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:gravity="center"-->
+    <!--            android:padding="5dp"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/imageView5"-->
+    <!--                android:layout_width="25dp"-->
+    <!--                android:layout_height="25dp"-->
+    <!--                android:src="@drawable/crown_unselected" />-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textView7"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="Premium" />-->
+    <!--        </LinearLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:gravity="center"-->
+    <!--            android:padding="5dp"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/imageView6"-->
+    <!--                android:layout_width="25dp"-->
+    <!--                android:layout_height="25dp"-->
+    <!--                android:src="@drawable/settings_unselected" />-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textView8"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="Settings" />-->
+    <!--        </LinearLayout>-->
+    <!--    </LinearLayout>-->
+
+</LinearLayout>

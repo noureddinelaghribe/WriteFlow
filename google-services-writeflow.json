@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "982182261941",
+    "project_id": "writeflow-194d0",
+    "storage_bucket": "writeflow-194d0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982182261941:android:c3bd99b6ce3a8d1bb03afc",
+        "android_client_info": {
+          "package_name": "com.noureddine.WriteFlow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxYnErkVoD-unFAlYv4YKVoa45v5UJf54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
