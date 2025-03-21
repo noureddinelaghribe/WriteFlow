@@ -8,7 +8,7 @@ Here are some screenshots of the WriteFlow app:
 
 | Screenshot 1 | Screenshot 2 | Screenshot 3 |
 |--------------|--------------|--------------|
-| ![Screenshot 1](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-49%20(2).jpg) | ![Screenshot 2](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-50.jpg) | ![Screenshot 3](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-50%20(2).jpg) |
+| ![Screenshot 1](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-49%20(2).jpg) | ![Screenshot 2](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-50.jpg) | ![Screenshot 3](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_17-55-26.jpg) |
 
 | Screenshot 4 | Screenshot 5 | Screenshot 6 |
 |--------------|--------------|--------------|
@@ -16,7 +16,7 @@ Here are some screenshots of the WriteFlow app:
 
 | Screenshot 7 | Screenshot 8 | Screenshot 9 |
 |--------------|--------------|--------------|
-| ![Screenshot 7]() | ![Screenshot 8]() | ![Screenshot 9]() |
+| ![Screenshot 7](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-49.jpg) | ![Screenshot 8](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-47.jpg) | ![Screenshot 9](https://raw.githubusercontent.com/noureddinne21/WriteFlow/refs/heads/main/WriteFlow/photo_2025-03-21_02-33-48.jpg) |
 
 
 ## Features
