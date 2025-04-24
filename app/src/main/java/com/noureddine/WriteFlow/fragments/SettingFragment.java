@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -36,26 +37,15 @@ import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 
 public class SettingFragment extends Fragment {
 
-
-    HomeActivity activity ;
-    ViewPager2 viewPager ;
-    LinearLayout linearLayoutUpgrade ;
-    LinearLayout linearLayoutPremium ;
-    Button upgradeButton ;
-    TextView rateGooglrPlay ;
-    TextView ternsAndPrivacy ;
-    TextView contactUs ;
-    TextView name ;
-    TextView email ;
-    TextView membership ;
-    TextView endSubscribtion ;
-    TextView wordPremium ;
-    TextView wordProcessing ;
-    DataCoverter dataCoverter = new DataCoverter();
-    NumberFormat numberFormat = new NumberFormat();
-    EncryptedPrefsManager prefs;
-    User user ;
-
+    private HomeActivity activity ;
+    private ViewPager2 viewPager ;
+    private LinearLayout linearLayoutUpgrade, linearLayoutPremium;
+    private Button upgradeButton ;
+    private TextView rateGooglrPlay, privacyPolicy, ternsofservice, contactUs, name, email, membership, endSubscribtion, wordPremium, wordProcessing;
+    private DataCoverter dataCoverter = new DataCoverter();
+    private NumberFormat numberFormat = new NumberFormat();
+    private EncryptedPrefsManager prefs;
+    private User user ;
 
 
     public SettingFragment() {}
@@ -82,8 +72,9 @@ public class SettingFragment extends Fragment {
         linearLayoutPremium = v.findViewById(R.id.linearLayoutPremium);
         upgradeButton = v.findViewById(R.id.button3);
         rateGooglrPlay = v.findViewById(R.id.textView13);
-        ternsAndPrivacy = v.findViewById(R.id.textView14);
-        contactUs = v.findViewById(R.id.textView15);
+        privacyPolicy = v.findViewById(R.id.textView14);
+        ternsofservice = v.findViewById(R.id.textView15);
+        contactUs = v.findViewById(R.id.textView19);
         name = v.findViewById(R.id.textView10);
         email = v.findViewById(R.id.textView11);
         membership = v.findViewById(R.id.textView12);
@@ -99,6 +90,14 @@ public class SettingFragment extends Fragment {
         viewPager = activity.getViewPager2(); // You'll need to create this method
         viewPager.setCurrentItem(3, true); // true for smooth scroll animation
 
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                viewPager = requireActivity().findViewById(R.id.viwepager);
+                viewPager.setCurrentItem(0, true);
+            }
+        });
+
         upgradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,16 +110,25 @@ public class SettingFragment extends Fragment {
         rateGooglrPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://link.com/";
+                String url = "https://play.google.com/store/apps/details?id=com.noureddine.WriteFlow";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             }
         });
 
-        ternsAndPrivacy.setOnClickListener(new View.OnClickListener() {
+        privacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://link.com/";
+                String url = "https://bit.ly/4hW3sa3";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+
+        ternsofservice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://bit.ly/42e2iAv";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             }
@@ -129,9 +137,16 @@ public class SettingFragment extends Fragment {
         contactUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://link.com/";
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
+//                String url = "https://link.com/";
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                startActivity(intent);
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:")); // هذا يحدد أن النية لإرسال بريد إلكتروني فقط
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"WordLoom0@gmail.com"});
+                startActivity(emailIntent);
+
+
             }
         });
 
@@ -158,6 +173,9 @@ public class SettingFragment extends Fragment {
 
         if (!user.getMembership().equals(FREE_PLAN_NAME)){
             linearLayoutUpgrade.setVisibility(View.GONE);
+            Log.d("TAG", "initUI: "+user.getEndSubscription());
+            Log.d("TAG", "initUI: "+System.currentTimeMillis());
+            Log.d("TAG", "initUI: "+dataCoverter.longToDataWithNameMonthe(user.getEndSubscription()));
             endSubscribtion.setText(dataCoverter.longToDataWithNameMonthe(user.getEndSubscription()));
             linearLayoutUpgrade.setVisibility(View.GONE);
             linearLayoutPremium.setVisibility(View.VISIBLE);

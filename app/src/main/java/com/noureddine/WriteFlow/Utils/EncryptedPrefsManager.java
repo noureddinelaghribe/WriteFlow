@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
+import com.noureddine.WriteFlow.model.ToolPreferences;
 import com.noureddine.WriteFlow.model.User;
 
 import org.json.JSONException;
@@ -26,6 +27,7 @@ public class EncryptedPrefsManager {
     private static final String TAG = "EncryptedPrefsManager";
     private static final String DEFAULT_PREFS_NAME = "encrypted_prefs";
     private static final String CURRENT_USER_KEY = "CURRENT_USER";
+    private static final String SETTING_KEY = "ToolPreferences";
     private final SharedPreferences encryptedPrefs;
     private static EncryptedPrefsManager instance;
 
@@ -138,6 +140,58 @@ public class EncryptedPrefsManager {
     }
 
 
+    public void saveToolPreferences(ToolPreferences toolPreferences) {
+        if (toolPreferences == null) {
+            Log.e(TAG, "Cannot save null user");
+            return;
+        }
+        try {
+            JSONObject ToolPreferencesJson = new JSONObject();
+            ToolPreferencesJson.put("paraphraserModel", toolPreferences.getParaphraserModel());
+            ToolPreferencesJson.put("grammarCheckerModel", toolPreferences.getGrammarCheckerModel());
+            ToolPreferencesJson.put("aiDetectorModel", toolPreferences.getAiDetectorModel());
+            ToolPreferencesJson.put("paragraphGeneratorModel", toolPreferences.getParagraphGeneratorModel());
+            ToolPreferencesJson.put("summarizerModel", toolPreferences.getSummarizerModel());
+
+            // Save user data using the user's uid as the key.
+            encryptedPrefs.edit().putString(SETTING_KEY, ToolPreferencesJson.toString()).apply();
+
+            // Also store the current user's uid under a constant key.
+            //encryptedPrefs.edit().putString(CURRENT_USER_KEY, user.getUid()).apply();
+
+            Log.d(TAG, "ToolPreferences saved successfully ");
+        } catch (JSONException e) {
+            Log.e(TAG, "Error serializing ToolPreferences data", e);
+        }
+    }
+
+    public ToolPreferences getToolPreferences() {
+        // Retrieve the uid of the current user from preferences.
+        String currentToolPreferences = encryptedPrefs.getString(SETTING_KEY, null);
+//        if (currentToolPreferences == null) {
+//            Log.e(TAG, "No current ToolPreferences found");
+//            return null;
+//        }
+        // Retrieve the user data using the current uid.
+        //String ToolPreferencesString = encryptedPrefs.getString(currentToolPreferences, null);
+        if (currentToolPreferences == null || currentToolPreferences.isEmpty()) {
+            Log.e(TAG, "No user data found : " + currentToolPreferences);
+            return null;
+        }
+        try {
+            JSONObject ToolPreferencesStringJson = new JSONObject(currentToolPreferences);
+            return new ToolPreferences(
+                    ToolPreferencesStringJson.getString("paraphraserModel"),
+                    ToolPreferencesStringJson.getString("grammarCheckerModel"),
+                    ToolPreferencesStringJson.getString("aiDetectorModel"),
+                    ToolPreferencesStringJson.getString("paragraphGeneratorModel"),
+                    ToolPreferencesStringJson.getString("summarizerModel")
+            );
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse ToolPreferences data", e);
+            return null;
+        }
+    }
 
 
 

@@ -3,11 +3,8 @@ package com.noureddine.WriteFlow.fragments;
 
 
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.BASIC_PLAN_NAME;
-import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.BASIC_PLAN_PROCESS_LIMIT;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.FREE_PLAN_NAME;
-import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.FREE_PLAN_PROCESS_LIMIT;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.PRO_PLAN_NAME;
-import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.PRO_PLAN_PROCESS_LIMIT;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.wordLimitBasicPlaneAIDetector;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.wordLimitBasicPlaneGrammarChecker;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.wordLimitBasicPlaneParagraphGenerator;
@@ -28,16 +25,13 @@ import static com.unity3d.services.core.properties.ClientProperties.getApplicati
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,15 +44,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,9 +65,11 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.noureddine.WriteFlow.R;
+import com.noureddine.WriteFlow.Utils.CopySaveResult;
 import com.noureddine.WriteFlow.Utils.DialogLoading;
 import com.noureddine.WriteFlow.Utils.EncryptedPrefsManager;
-import com.noureddine.WriteFlow.Utils.RewardedUnityAd;
+import com.noureddine.WriteFlow.Utils.GsonToGrammarChecker;
+import com.noureddine.WriteFlow.Utils.RemoveOutsideBraces;
 import com.noureddine.WriteFlow.activities.ProcessingWordActivity;
 import com.noureddine.WriteFlow.model.GrammarChecker;
 import com.noureddine.WriteFlow.model.HistoryArticle;
@@ -82,12 +77,14 @@ import com.noureddine.WriteFlow.model.TypeProcessing;
 import com.noureddine.WriteFlow.model.User;
 import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 import com.noureddine.WriteFlow.viewModels.ChatViewModel;
+import com.noureddine.WriteFlow.viewModels.GeminiViewModel;
 import com.noureddine.WriteFlow.viewModels.HistoryArticleViewModel;
 import com.unity3d.ads.IUnityAdsInitializationListener;
+import com.unity3d.ads.IUnityAdsLoadListener;
+import com.unity3d.ads.IUnityAdsShowListener;
 import com.unity3d.ads.UnityAds;
+import com.unity3d.ads.UnityAdsShowOptions;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -103,44 +100,41 @@ import java.util.ArrayList;
 
 public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitializationListener{
 
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//    private static final Logger log = LogManager.getLogger(ProcessingWordsFragment.class);
-//
-//    private String mParam1;
-//    private String mParam2;
 
     private final String GAME_ID = "5817517";
     private final boolean TEST_MODE = false; // Disable for production
 
-    RewardedUnityAd rewardedUnityAd;
+    private String rewardedAdUnitId = "Rewarded_Android";
 
-    String []languages = {"  --  Languages  --  ","  English (US)  ","  French  ","  Spanish  ","  German  ","  Arabic  ","  Africans  ","  Chinese  ","  Hindi  ",
+    private String []languages = {"  --  Languages  --  ","  English (US)  ","  French  ","  Spanish  ","  German  ","  Arabic  ","  Africans  ","  Chinese  ","  Hindi  ",
             "  Romanian  ","  Russian  ", "  Danish  ","  Indonesian  ","  Dutch  ","  Italian  ","  Swedish  ","  English (AU)  ","  Japanese  ","  Malay  ",
             "  Tagalog  ","  English (CA)  ","  Turkish  ", "  English (UK)  ","  Norwegian  ","  Ukrainian  ","  Polish  ","  Vietnamese  ","  Portuguese  "};
 
-    String []models = {"  -- Modes --  ","  Standard  ","  Fluency  ","  Humanize  ","  Formal  ","  Academic  ","  Simple  ","  Creative  ","  Expand  "};
+    private String []models = {"  -- Modes --  ","  Standard  ","  Fluency  ","  Humanize  ","  Formal  ","  Academic  ","  Simple  ","  Creative  ","  Expand  "};
+
+    private final String []modelAi = {"openai","gemini"};
 
     int wordLimit = 0;
-    TextView typeTextView ,moreLess ,countWord ,limit,aiPercentage,humanPercentage,grammarPercentage;
-    ImageView img ,back,copy,txt,word,pdf,html;
-    Spinner spinnerLqnguqge ,spinnerMode;
-    LinearLayout linearLayoutMore ;
-    EditText keyword ,text;
-    Button button ;
-    CardView cardViewfilters,cardViewAiGenirator,cardViewCopyResult,cardViewGrammerError;
-    DialogLoading dialogLoading;
-    ChatViewModel viewModel;
-    String type;
+    private TextView typeTextView ,moreLess ,countWord ,limit,aiPercentage,humanPercentage,grammarPercentage;
+    private ImageView img ,back,copy,txt,word,pdf,html;
+    private Spinner spinnerLqnguqge ,spinnerMode;
+    private LinearLayout linearLayoutMore ;
+    private EditText keyword ,text;
+    private Button button ;
+    private CardView cardViewfilters,cardViewAiGenirator,cardViewCopyResult,cardViewGrammerError;
+    private DialogLoading dialogLoading;
+    private ChatViewModel viewModel;
+    private GeminiViewModel geminiViewModel;
+    private String type;
     boolean isExpanded = false;
-    ArrayAdapter<String> spinnerModeAdapter;
-    EncryptedPrefsManager prefs;
-    User user ;
-    FirebaseRepository firebaseRepository;
-    HistoryArticleViewModel historyArticleViewModel;
-    HistoryArticle historyArticle = new HistoryArticle();
-    Bundle bundle;
-
+    private ArrayAdapter<String> spinnerModeAdapter;
+    private EncryptedPrefsManager prefs;
+    private User user ;
+    private FirebaseRepository firebaseRepository;
+    private HistoryArticleViewModel historyArticleViewModel;
+    private HistoryArticle historyArticle = new HistoryArticle();
+    private Bundle bundle;
+    private CopySaveResult copySaveResult;
 
     // Activity result launcher for regular storage permission
     private ActivityResultLauncher<String> requestPermissionLauncher =
@@ -154,11 +148,9 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
 
     public ProcessingWordsFragment() {}
 
-    public static ProcessingWordsFragment newInstance(/*String param1, String param2*/) {
+    public static ProcessingWordsFragment newInstance() {
         ProcessingWordsFragment fragment = new ProcessingWordsFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -166,13 +158,6 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-
-        // Initialize Unity Ads
-        UnityAds.initialize(getApplicationContext(), GAME_ID, TEST_MODE, this);
 
         bundle = getArguments();
         if (bundle != null){
@@ -224,9 +209,13 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
         firebaseRepository = new FirebaseRepository(getContext());
         dialogLoading = new DialogLoading(getContext());
         setType();
+
         showHiddenFilter();
-        rewardedUnityAd = new RewardedUnityAd(getContext());
-        rewardedUnityAd.loadRewardedAd();
+
+        if (user.getMembership().equals(FREE_PLAN_NAME)){
+            UnityAds.initialize(getApplicationContext(), GAME_ID, TEST_MODE, this);
+            loadRewardedAd();
+        }
 
         dialogLoading.loadingProgressDialog("Processing...");
         limit.setText(" / "+wordLimit+" Word");
@@ -245,30 +234,14 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
 
         if (bundle != null){
             if(bundle.get("HistoryArticle") instanceof HistoryArticle){
-                onProcessingComplete(((HistoryArticle) bundle.get("HistoryArticle")).getType());
+                onProcessingComplete(((HistoryArticle) bundle.get("HistoryArticle")).getType().trim());
             }
         }
 
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) getViewLifecycleOwner()).get(ChatViewModel.class);
+        fetchOpenai();
+        fetchGemini();
 
-        viewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
-            if (isLoading) dialogLoading.showLoadingProgressDialog();
-            button.setEnabled(!isLoading);
-            text.setEnabled(!isLoading);
-        });
-
-        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), errorMessage -> {
-            Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
-            dialogLoading.dismissLoadingProgressDialog();
-        });
-
-        viewModel.getResponseLiveData().observe(getViewLifecycleOwner(), response -> {
-
-            dialogLoading.dismissLoadingProgressDialog();
-
-            onProcessingComplete(response);
-
-        });
+        copySaveResult = new CopySaveResult(getActivity(),requestPermissionLauncher);
 
         moreLess.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,8 +269,7 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                     if (user.getMembership().equals(FREE_PLAN_NAME)){
                         //show ads
                         //Toast.makeText(getContext(), "Show Ads FREE_PLAN_NAME", Toast.LENGTH_SHORT).show();
-                        rewardedUnityAd.showRewardedAd();
-                        pushToProcess();
+                        showRewardedAd();
                     }else {
                         // minis from wordPremium or wordProcessing orshow ads
                         // minis from wordPremium or wordProcessing
@@ -336,35 +308,35 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
         copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                copyClipboard(text.getText().toString());
+                copySaveResult.copyClipboard(text.getText().toString());
             }
         });
 
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveAsFile(text.getText().toString(),"txt");
+                copySaveResult.saveAsFile(text.getText().toString(),"txt");
             }
         });
 
         word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveAsFile(text.getText().toString(),"word");
+                copySaveResult.saveAsFile(text.getText().toString(),"word");
             }
         });
 
         pdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveAsFile(text.getText().toString(),"pdf");
+                copySaveResult.saveAsFile(text.getText().toString(),"pdf");
             }
         });
 
         html.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveAsFile(text.getText().toString(),"html");
+                copySaveResult.saveAsFile(text.getText().toString(),"html");
             }
         });
 
@@ -452,7 +424,57 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
 
     }
 
-    private void pushToProcess(){
+    private void fetchOpenai() {
+
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) getViewLifecycleOwner()).get(ChatViewModel.class);
+
+        viewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) dialogLoading.showLoadingProgressDialog();
+            button.setEnabled(!isLoading);
+            text.setEnabled(!isLoading);
+        });
+
+        viewModel.getErrorLiveData().observe(getViewLifecycleOwner(), errorMessage -> {
+            Toast.makeText(getContext(), errorMessage, Toast.LENGTH_LONG).show();
+            dialogLoading.dismissLoadingProgressDialog();
+        });
+
+        viewModel.getResponseLiveData().observe(getViewLifecycleOwner(), response -> {
+            dialogLoading.dismissLoadingProgressDialog();
+            onProcessingComplete(response.trim());
+        });
+
+    }
+
+    private void fetchGemini() {
+
+        geminiViewModel = new ViewModelProvider((ViewModelStoreOwner) getViewLifecycleOwner()).get(GeminiViewModel.class);
+
+        geminiViewModel.getResult().observe(getViewLifecycleOwner(), result -> {
+            Log.d("TAG", "onCreate: "+result);
+            dialogLoading.dismissLoadingProgressDialog();
+            onProcessingComplete(result.trim());
+        });
+
+        geminiViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            Log.d("TAG", "onCreate: isLoading");
+            if (isLoading) dialogLoading.showLoadingProgressDialog();
+            button.setEnabled(!isLoading);
+            text.setEnabled(!isLoading);
+        });
+
+        geminiViewModel.getError().observe(getViewLifecycleOwner(), error -> {
+            if (error != null) {
+                Log.d("TAG", "onCreate: "+error);
+                Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+                dialogLoading.dismissLoadingProgressDialog();
+            }
+        });
+
+    }
+
+
+        private void pushToProcess(){
 
         if (countWords(text.getText().toString().trim()) > wordLimit){
             Toast.makeText(getContext(), "The text exceeds the allowed limit.", Toast.LENGTH_SHORT).show();
@@ -470,31 +492,123 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                         if (spinnerMode.getSelectedItemPosition() == 0){
                             Toast.makeText(getContext(), "Please select a text style mode.", Toast.LENGTH_SHORT).show();
                         }else {
-                            viewModel.sendMessage(new TypeProcessing(
-                                    text.getText().toString(),
-                                    type,
-                                    languages[spinnerLqnguqge.getSelectedItemPosition()],
-                                    models[spinnerMode.getSelectedItemPosition()],
-                                    ""
-                            ));
+
+                            if (prefs.getToolPreferences().getParaphraserModel().equals(modelAi[0])){
+                                viewModel.sendMessage(new TypeProcessing(
+                                        text.getText().toString(),
+                                        type,
+                                        languages[spinnerLqnguqge.getSelectedItemPosition()],
+                                        models[spinnerMode.getSelectedItemPosition()],
+                                        ""
+                                ));
+                                Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            }else if (prefs.getToolPreferences().getParaphraserModel().equals(modelAi[1])){
+                                geminiViewModel.generateContent(new TypeProcessing(
+                                        text.getText().toString(),
+                                        type,
+                                        languages[spinnerLqnguqge.getSelectedItemPosition()],
+                                        models[spinnerMode.getSelectedItemPosition()],
+                                        ""
+                                ));
+                                Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }
 
                     break;
                 case"Grammar Checker":
+
+                    if (spinnerLqnguqge.getSelectedItemPosition() == 0){
+                        Toast.makeText(getContext(), "Please select a language.", Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        if (prefs.getToolPreferences().getGrammarCheckerModel().equals(modelAi[0])){
+                            viewModel.sendMessage(new TypeProcessing(
+                                    text.getText().toString(),
+                                    type,
+                                    "",
+                                    "",
+                                    ""
+                            ));
+                            Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                        }else if (prefs.getToolPreferences().getParagraphGeneratorModel().equals(modelAi[1])){
+                            geminiViewModel.generateContent(new TypeProcessing(
+                                    text.getText().toString(),
+                                    type,
+                                    "",
+                                    "",
+                                    ""
+                            ));
+                            Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    break;
                 case"AI Detector":
+
+                    if (spinnerLqnguqge.getSelectedItemPosition() == 0){
+                        Toast.makeText(getContext(), "Please select a language.", Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        if (prefs.getToolPreferences().getAiDetectorModel().equals(modelAi[0])){
+                            viewModel.sendMessage(new TypeProcessing(
+                                    text.getText().toString(),
+                                    type,
+                                    "",
+                                    "",
+                                    ""
+                            ));
+                            Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                        }else if (prefs.getToolPreferences().getAiDetectorModel().equals(modelAi[1])){
+                            geminiViewModel.generateContent(new TypeProcessing(
+                                    text.getText().toString(),
+                                    type,
+                                    "",
+                                    "",
+                                    ""
+                            ));
+                            Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    break;
                 case "Summarizer":
 
                     if (spinnerLqnguqge.getSelectedItemPosition() == 0){
                         Toast.makeText(getContext(), "Please select a language.", Toast.LENGTH_SHORT).show();
                     }else {
-                        viewModel.sendMessage(new TypeProcessing(
-                                text.getText().toString(),
-                                type,
-                                "",
-                                "",
-                                ""
-                        ));
+
+                        if (prefs.getToolPreferences().getSummarizerModel().equals(modelAi[0])){
+                            viewModel.sendMessage(new TypeProcessing(
+                                    text.getText().toString(),
+                                    type,
+                                    "",
+                                    "",
+                                    ""
+                            ));
+                            Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                        }else if (prefs.getToolPreferences().getSummarizerModel().equals(modelAi[1])){
+                            geminiViewModel.generateContent(new TypeProcessing(
+                                    text.getText().toString(),
+                                    type,
+                                    "",
+                                    "",
+                                    ""
+                            ));
+                            Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
 
                     break;
@@ -507,13 +621,29 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                             Toast.makeText(getContext(), "Please select a text style mode.", Toast.LENGTH_SHORT).show();
                         }else {
                             if (type.equals("Paragraph Generator")){
-                                viewModel.sendMessage(new TypeProcessing(
-                                        text.getText().toString(),
-                                        type,
-                                        languages[spinnerLqnguqge.getSelectedItemPosition()],
-                                        models[spinnerMode.getSelectedItemPosition()],
-                                        keyword.getText().toString())
-                                );
+
+                                if (prefs.getToolPreferences().getParagraphGeneratorModel().equals(modelAi[0])){
+                                    viewModel.sendMessage(new TypeProcessing(
+                                            text.getText().toString(),
+                                            type,
+                                            languages[spinnerLqnguqge.getSelectedItemPosition()],
+                                            models[spinnerMode.getSelectedItemPosition()],
+                                            keyword.getText().toString())
+                                    );
+                                    Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                                }else if (prefs.getToolPreferences().getParagraphGeneratorModel().equals(modelAi[1])){
+                                    geminiViewModel.generateContent(new TypeProcessing(
+                                            text.getText().toString(),
+                                            type,
+                                            languages[spinnerLqnguqge.getSelectedItemPosition()],
+                                            models[spinnerMode.getSelectedItemPosition()],
+                                            keyword.getText().toString())
+                                    );
+                                    Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         }
                     }
@@ -649,19 +779,6 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
     }
 
 
-    public GrammarChecker parseGrammarCheckerResponse(String response) {
-        try {
-            JSONObject jsonContent = new JSONObject(response);
-            String text = jsonContent.getString("text");         // Extract the "text" field
-            String issue = String.valueOf(jsonContent.getInt("issue")); // Extract and convert the "issue" field to String
-            return new GrammarChecker(text, issue);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
 
     @SuppressLint("SetTextI18n")
     private void onProcessingComplete(String response) {
@@ -689,7 +806,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                     if(bundle.get("HistoryArticle") instanceof HistoryArticle){
                         grammarChecker = ((HistoryArticle) bundle.get("HistoryArticle")).getGrammarChecker();
                     }else {
-                        grammarChecker = new GrammarChecker(parseGrammarCheckerResponse(response));
+                        String newResponse = RemoveOutsideBraces.removeOutsideBraces(response);
+                        grammarChecker = new GrammarChecker(GsonToGrammarChecker.parseGrammarCheckerResponse(newResponse));
                         if (!user.getMembership().equals(FREE_PLAN_NAME)){
                             // String uid, GrammarChecker grammarChecker, String type, String article, long date
                             if (grammarChecker != null){
@@ -712,8 +830,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                     // String uid,String response, String type, String article, long date
                     historyArticleViewModel.insertArticle(new HistoryArticle( prefs.getUser().getUid(), response, type, text.getText().toString().trim(), System.currentTimeMillis()));
                     try {
-                        aiPercentage.setText(Integer.parseInt(response)+"%");
-                        humanPercentage.setText((100-Integer.parseInt(response))+"%");
+                        aiPercentage.setText(Integer.parseInt(response.trim())+"%");
+                        humanPercentage.setText((100-Integer.parseInt(response.trim()))+"%");
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -772,20 +890,6 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
     }
 
 
-    @Override
-    public void onInitializationComplete() {
-        // Unity Ads initialization complete
-        Log.d("UnityAds", "Initialization Complete");
-    }
-
-    @Override
-    public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
-        // Unity Ads initialization failed
-        Log.d("UnityAds", "Initialization Failed: " + error + " - " + message);
-    }
-
-
-
 //    private void loadingProgressDialog() {
 //        dialog = new Dialog(getContext());
 //        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -810,222 +914,77 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
 //        return dialog != null && dialog.isShowing();
 //    }
 
-    public void copyClipboard(String text){
-        // Inside your Fragment class, e.g., in onViewCreated or another method
-        ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("label", text);
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(requireActivity(), "Text copied to clipboard", Toast.LENGTH_SHORT).show();
+
+
+    @Override
+    public void onInitializationComplete() {
+        // Unity Ads initialization complete
+        Log.d("UnityAds", "Initialization Complete");
     }
-    @SuppressLint("MissingInflatedId")
-    public void saveAsFile(String text,String type){
 
-        // Inflate the dialog layout
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.custom_dialog_name_save_file, null);
-
-        // Get reference to the EditText in the dialog layout
-        final EditText editText = dialogView.findViewById(R.id.dialog_edit_text);
-
-        // Build the dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Name File")
-                .setView(dialogView)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            if (!Environment.isExternalStorageManager()) {
-                                try {
-                                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                                    Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
-                                    intent.setData(uri);
-                                    startActivity(intent);
-                                    Toast.makeText(requireContext(), "Please grant all files access permission", Toast.LENGTH_LONG).show();
-                                } catch (Exception e) {
-                                    // If the specific intent isn't available, try the general storage settings
-                                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                    startActivity(intent);
-                                    Toast.makeText(requireContext(), "Please grant all files access permission", Toast.LENGTH_LONG).show();
-                                }
-                            } else {
-
-                                // txt word pdf html
-                                switch (type){
-                                    case "txt":
-                                        saveAsTxt(text,editText.getText().toString().trim());
-                                        break;
-                                    case "word":
-                                        saveTextAsWord(text,editText.getText().toString().trim());
-                                        break;
-                                    case "pdf":
-                                        saveTextAsPDF(text,editText.getText().toString().trim());
-                                        break;
-                                    case "html":
-                                        saveAsHtml(text,editText.getText().toString().trim());
-                                        break;
-                                }
-
-                            }
-                        } else {
-                            // For Android 10 (API 29) and below, request READ_EXTERNAL_STORAGE
-                            requestPermissionLauncher.launch(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE);
-                        }
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-        // Show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+    @Override
+    public void onInitializationFailed(UnityAds.UnityAdsInitializationError error, String message) {
+        // Unity Ads initialization failed
+        Log.d("UnityAds", "Initialization Failed: " + error + " - " + message);
     }
 
 
-    public void saveAsTxt(String text,String fileName){
+    // REWARDED ADS METHODS
 
-        String SAVE_FOLDER_NAME = "PhraseFlow";
-        String SAVE_FILE_NAME = fileName+".txt";
-
-        File file = getContext().getDatabasePath(SAVE_FILE_NAME);
-        File sdir = new File(Environment.getExternalStorageDirectory(), SAVE_FOLDER_NAME);
-
-        String path = sdir.getPath() + File.separator + SAVE_FILE_NAME;
-
-        if (!sdir.exists()) {
-            sdir.mkdirs();
-        }
-
-        if (path != null) {
-            // Create a new file in that directory
-            try (FileOutputStream fos = new FileOutputStream(path)) {
-                fos.write(text.getBytes());
-                Toast.makeText(requireContext(), "File saved: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(requireContext(), "Error saving file", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(requireContext(), "External storage not available", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-
-    private void saveTextAsWord(String text, String fileName) {
-
-        String SAVE_FOLDER_NAME = "PhraseFlow";
-        String SAVE_FILE_NAME = fileName+".docx";
-
-        File file = getContext().getDatabasePath(SAVE_FILE_NAME);
-        File sdir = new File(Environment.getExternalStorageDirectory(), SAVE_FOLDER_NAME);
-
-        String path = sdir.getPath() + File.separator + SAVE_FILE_NAME;
-
-        if (!sdir.exists()) {
-            sdir.mkdirs();
-        }
-
-        try {
-            // Create a new document
-            XWPFDocument document = new XWPFDocument();
-
-            // Create a new paragraph
-            XWPFParagraph paragraph = document.createParagraph();
-            XWPFRun run = paragraph.createRun();
-            run.setText(text);
-
-            // Define the file path
-            //File file = new File(getExternalFilesDir(null), fileName + ".docx");
-
-            // Write the document to file
-            FileOutputStream out = new FileOutputStream(path);
-            document.write(out);
-            out.close();
-            document.close();
-
-            Toast.makeText(getContext(), "Document saved to " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), "Error saving document: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void saveTextAsPDF(String text, String fileName) {
-        String SAVE_FOLDER_NAME = "PhraseFlow";
-        String SAVE_FILE_NAME = fileName+".pdf";
-
-        File file = getContext().getDatabasePath(SAVE_FILE_NAME);
-        File sdir = new File(Environment.getExternalStorageDirectory(), SAVE_FOLDER_NAME);
-
-        String path = sdir.getPath() + File.separator + SAVE_FILE_NAME;
-
-        if (!sdir.exists()) {
-            sdir.mkdirs();
-        }
-
-        try {
-
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(path));
-            document.open();
-            document.add(new Paragraph(text));
-            document.close();
-
-            Toast.makeText(getContext(), "PDF saved to " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(), "Error saving PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void saveAsHtml(String content, String fileName) {
-        try {
-            // Create HTML content
-            String htmlContent = "<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<head>\n" +
-                    //"    <title>" + fileName + "</title>\n" +
-                    "</head>\n" +
-                    "<body>\n" +
-                    content +
-                    "\n</body>\n" +
-                    "</html>";
-
-            String SAVE_FOLDER_NAME = "PhraseFlow";
-            String SAVE_FILE_NAME = fileName+".html";
-
-            File file = getContext().getDatabasePath(SAVE_FILE_NAME);
-            File sdir = new File(Environment.getExternalStorageDirectory(), SAVE_FOLDER_NAME);
-
-            String path = sdir.getPath() + File.separator + SAVE_FILE_NAME;
-
-            if (!sdir.exists()) {
-                sdir.mkdirs();
+    public void loadRewardedAd() {
+        UnityAds.load(rewardedAdUnitId, new IUnityAdsLoadListener() {
+            @Override
+            public void onUnityAdsAdLoaded(String placementId) {
+                // Rewarded ad loaded
+                Log.d("UnityAds", "Rewarded ad loaded: " + placementId);
             }
 
-            // Write to the file
-            FileWriter writer = new FileWriter(path);
-            writer.write(htmlContent);
-            writer.close();
-
-            Toast.makeText(requireContext(), "HTML saved to " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(requireContext(), "Error saving HTML: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onUnityAdsFailedToLoad(String placementId, UnityAds.UnityAdsLoadError error, String message) {
+                // Rewarded ad failed to load
+                Log.e("UnityAds", "Rewarded ad load failed: " + error + " - " + message);
+                // Retry loading after a delay
+                new Handler().postDelayed(() -> loadRewardedAd(), 5000);
+            }
+        });
     }
 
+    public void showRewardedAd() {
+        UnityAds.show( getActivity(), rewardedAdUnitId, new UnityAdsShowOptions(), new IUnityAdsShowListener() {
+            @Override
+            public void onUnityAdsShowFailure(String placementId, UnityAds.UnityAdsShowError error, String message) {
+                // Rewarded ad show failed
+                Log.e("UnityAds", "Rewarded ad show failed: " + error + " - " + message);
+                loadRewardedAd();
+                dialogLoading.dismissLoadingProgressDialog();
+                Toast.makeText(getContext(), "Ad show failed click agin ", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onUnityAdsShowStart(String placementId) {
+                // Rewarded ad show started
+                Log.d("UnityAds", "Rewarded ad show started");
+                pushToProcess();
+            }
+
+            @Override
+            public void onUnityAdsShowClick(String placementId) {
+                // Rewarded ad was clicked
+                Log.d("UnityAds", "Rewarded ad clicked");
+            }
+
+            @Override
+            public void onUnityAdsShowComplete(String placementId, UnityAds.UnityAdsShowCompletionState state) {
+                // Reward user here if state is COMPLETED
+                if (state.equals(UnityAds.UnityAdsShowCompletionState.COMPLETED)) {
+                    // Reward the user
+                    Log.d("UnityAds", "Rewarded ad completed - grant reward");
+                } else {
+                    Log.d("UnityAds", "Rewarded ad not completed");
+                }
+            }
+        });
+    }
 
 
 

@@ -38,7 +38,7 @@ public class GoogleSign {
     private Fragment fragment;
     private FirebaseAuth auth;
     private EncryptedPrefsManager prefs;
-    FirebaseRepository firebaseRepository;
+    private FirebaseRepository firebaseRepository;
 
     // Constructor for Activity
     public GoogleSign(Activity activity, FirebaseAuth auth, EncryptedPrefsManager prefs) {

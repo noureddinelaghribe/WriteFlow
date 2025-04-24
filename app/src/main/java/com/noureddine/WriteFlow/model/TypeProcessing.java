@@ -2,11 +2,11 @@ package com.noureddine.WriteFlow.model;
 
 public class TypeProcessing {
 
-    String text;
-    String type;
-    String language;
-    String mode;
-    String keywords;
+    private String text;
+    private String type;
+    private String language;
+    private String mode;
+    private String keywords;
 
     public TypeProcessing(String text, String type, String language, String mode, String keywords) {
         this.text = text;

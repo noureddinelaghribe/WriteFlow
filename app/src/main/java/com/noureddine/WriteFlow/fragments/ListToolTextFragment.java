@@ -22,23 +22,15 @@ import java.util.List;
 
 public class ListToolTextFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    List<TextTool> textTools = new ArrayList<>() ;
-    RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
+    private List<TextTool> textTools = new ArrayList<>() ;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
 
     public ListToolTextFragment() {}
 
-    public static ListToolTextFragment newInstance(String param1, String param2) {
+    public static ListToolTextFragment newInstance() {
         ListToolTextFragment fragment = new ListToolTextFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,10 +38,6 @@ public class ListToolTextFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         addTool();
     }
 

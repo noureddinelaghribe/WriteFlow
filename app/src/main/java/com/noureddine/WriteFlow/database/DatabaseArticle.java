@@ -42,7 +42,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import com.noureddine.WriteFlow.model.HistoryArticle;
 
-@Database(entities = {HistoryArticle.class}, version = 2, exportSchema = false)
+@Database(entities = {HistoryArticle.class}, version = 1, exportSchema = false)
 @TypeConverters({GrammarCheckerConverter.class})
 public abstract class DatabaseArticle extends RoomDatabase {
 

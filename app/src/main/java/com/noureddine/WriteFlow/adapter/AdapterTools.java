@@ -18,8 +18,8 @@ import java.util.List;
 
 public class AdapterTools extends RecyclerView.Adapter<AdapterTools.ViweHolder>{
 
-    List<Tool> toolList = new ArrayList<>();
-    setOnClickListenerTool setOnClickListenerTool;
+    private List<Tool> toolList = new ArrayList<>();
+    private setOnClickListenerTool setOnClickListenerTool;
 
     public AdapterTools(List<Tool> toolList, AdapterTools.setOnClickListenerTool setOnClickListenerTool) {
         this.toolList = toolList;

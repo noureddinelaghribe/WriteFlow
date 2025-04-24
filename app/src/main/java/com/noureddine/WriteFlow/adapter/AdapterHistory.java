@@ -29,9 +29,9 @@ import java.util.List;
 
 public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViweHolder>{
 
-    List<HistoryArticle> historyList ;
-    DataCoverter dataCoverter = new DataCoverter();
-    OnClickListener onClickListener;
+    private List<HistoryArticle> historyList ;
+    private DataCoverter dataCoverter = new DataCoverter();
+    private OnClickListener onClickListener;
 
     public AdapterHistory(List<HistoryArticle> historyList,OnClickListener onClickListener) {
         this.historyList = historyList != null ? historyList : new ArrayList<>();
@@ -62,7 +62,7 @@ public class AdapterHistory extends RecyclerView.Adapter<AdapterHistory.ViweHold
 
         switch (historyArticle.getType()){
             case"Grammar Checker":
-                holder.text.setText("Grammar Error Fixed : "+limitText(historyArticle.getResponse(),100));
+                holder.text.setText("Grammar Error Fixed : "+limitText(historyArticle.getGrammarChecker().getIssue(),100));
                 break;
             case"AI Detector":
                 holder.text.setText("AI-generated : "+limitText(historyArticle.getResponse(),100)+" %");

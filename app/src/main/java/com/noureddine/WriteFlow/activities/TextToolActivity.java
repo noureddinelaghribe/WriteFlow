@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 
 import com.noureddine.WriteFlow.R;
 import com.noureddine.WriteFlow.fragments.ListToolTextFragment;
+import com.noureddine.WriteFlow.fragments.ToolTextFragment;
+import com.noureddine.WriteFlow.model.HistoryArticle;
 
 public class TextToolActivity extends AppCompatActivity {
 
@@ -29,10 +31,21 @@ public class TextToolActivity extends AppCompatActivity {
             return insets;
         });
 
-        ListToolTextFragment listToolTextFragment = new ListToolTextFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayoutTextTool, listToolTextFragment)
-                .commit();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            ToolTextFragment toolTextFragment = new ToolTextFragment();
+            toolTextFragment.setArguments(extras);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutTextTool, toolTextFragment)
+                    .commit();
+        }else {
+            ListToolTextFragment listToolTextFragment = new ListToolTextFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutTextTool, listToolTextFragment)
+                    .commit();
+        }
+
+
 
 
 

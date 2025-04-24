@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class AdapterPager extends FragmentStateAdapter {
 
-    ArrayList<MyTab> list = new ArrayList<MyTab>();
+    private ArrayList<MyTab> list = new ArrayList<MyTab>();
 
     public AdapterPager(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);

@@ -17,7 +17,7 @@ import java.util.Objects;
 public class FirebaseRepository {
     private static final String TAG = "FirebaseRepository";
     private DatabaseReference databaseReference;
-    EncryptedPrefsManager prefs;
+    private EncryptedPrefsManager prefs;
 
     public FirebaseRepository(Context context) {
         // Get a reference to the "data" node in your Firebase Realtime Database

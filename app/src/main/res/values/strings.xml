@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">WriteFlow</string>
+    <string name="app_name">WordLoom</string>
     <string name="default_web_client_id">982182261941-bss2lhvr689v1ivkhjv8jdem9ckd9c2i.apps.googleusercontent.com</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

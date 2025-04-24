@@ -2,6 +2,7 @@ package com.noureddine.WriteFlow.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,17 +38,13 @@ import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 
 public class LoginFragment extends Fragment {
 
-    EditText email ;
-    EditText password ;
-    TextView forgot ;
-    TextView register ;
-    Button login ;
-    LinearLayout google ;
-    FirebaseAuth auth;
-    EncryptedPrefsManager prefs;
-    //DatabaseReference databaseReference;
-    FirebaseRepository firebaseRepository;
-    DialogLoading dialogLoading;
+    private EditText email, password;
+    private TextView forgot, register, privacyPolicy;
+    private Button login ;
+    private LinearLayout google ;
+    private FirebaseAuth auth;
+    private EncryptedPrefsManager prefs;
+    private DialogLoading dialogLoading;
     private GoogleSign googleSignHelper;
 
 
@@ -77,9 +74,10 @@ public class LoginFragment extends Fragment {
         register = v.findViewById(R.id.textView17);
         login = v.findViewById(R.id.button);
         google = v.findViewById(R.id.linearLayout);
+        privacyPolicy = v.findViewById(R.id.textView19);
+
         auth = FirebaseAuth.getInstance();
         prefs = EncryptedPrefsManager.getInstance(getContext());
-        firebaseRepository = new FirebaseRepository(getContext());
         dialogLoading = new DialogLoading(getContext());
         dialogLoading.loadingProgressDialog("Loading...");
         googleSignHelper = new GoogleSign(this, auth, prefs);
@@ -110,6 +108,15 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 googleSignHelper.signIn();
+            }
+        });
+
+        privacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://bit.ly/4hW3sa3";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
             }
         });
 

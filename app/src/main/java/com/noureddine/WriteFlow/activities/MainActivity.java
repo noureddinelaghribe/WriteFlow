@@ -24,10 +24,8 @@ import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 
 public class MainActivity extends AppCompatActivity {
 
-    EncryptedPrefsManager prefs;
-    DatabaseReference databaseReference;
-    FirebaseAuth auth;
-    Intent intent;
+    private EncryptedPrefsManager prefs;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        auth = FirebaseAuth.getInstance();
         prefs = EncryptedPrefsManager.getInstance(this);
-        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Use a Handler to delay the transition to the main activity
         new Handler().postDelayed(new Runnable() {

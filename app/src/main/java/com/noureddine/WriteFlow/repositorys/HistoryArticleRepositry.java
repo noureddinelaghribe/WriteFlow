@@ -27,6 +27,10 @@ public class HistoryArticleRepositry {
         executorService.execute(() -> historyArticleDao.insertArticle(historyArticle));
     }
 
+    public void updateArticle(HistoryArticle historyArticle) {
+        executorService.execute(() -> historyArticleDao.updateArticle(historyArticle));
+    }
+
     public LiveData<List<HistoryArticle>> getAllArticles(String uid) {
         return historyArticleDao.getAllArticles(uid);
     }

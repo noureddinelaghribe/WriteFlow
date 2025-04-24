@@ -13,8 +13,8 @@ import com.noureddine.WriteFlow.R;
 
 public class DialogLoading {
 
-    Dialog dialog;
-    Context context;
+    private Dialog dialog;
+    private Context context;
 
     public DialogLoading(Context context) {
         this.context = context;

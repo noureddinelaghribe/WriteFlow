@@ -4,6 +4,7 @@ import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.FREE_PLAN_NAM
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -45,16 +46,14 @@ import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 
 public class RegisterFragment extends Fragment {
 
-    EditText name ;
-    EditText email ;
-    EditText password ;
-    TextView login ;
-    Button register ;
-    LinearLayout google ;
-    FirebaseAuth auth;
-    EncryptedPrefsManager prefs;
-    FirebaseRepository firebaseRepository;
-    DialogLoading dialogLoading;
+    private EditText name, email, password;
+    private TextView login, privacyPolicy ;
+    private Button register ;
+    private LinearLayout google ;
+    private FirebaseAuth auth;
+    private EncryptedPrefsManager prefs;
+    private FirebaseRepository firebaseRepository;
+    private DialogLoading dialogLoading;
     private GoogleSign googleSignHelper;
 
 
@@ -84,6 +83,7 @@ public class RegisterFragment extends Fragment {
         login = v.findViewById(R.id.textView17);
         register = v.findViewById(R.id.button);
         google = v.findViewById(R.id.linearLayout);
+        privacyPolicy = v.findViewById(R.id.textView19);
 
         auth = FirebaseAuth.getInstance();
         prefs = EncryptedPrefsManager.getInstance(getContext());
@@ -116,6 +116,15 @@ public class RegisterFragment extends Fragment {
 
                 googleSignHelper.signIn();
 
+            }
+        });
+
+        privacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://bit.ly/4hW3sa3";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
             }
         });
 

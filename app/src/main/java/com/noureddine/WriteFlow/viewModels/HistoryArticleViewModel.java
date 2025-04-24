@@ -24,6 +24,10 @@ public class HistoryArticleViewModel {
         historyArticleRepositry.insertArticle(historyArticle);
     }
 
+    public void updateArticle(HistoryArticle historyArticle) {
+        historyArticleRepositry.updateArticle(historyArticle);
+    }
+
     public LiveData<List<HistoryArticle>> getAllUsers(String uid) {
         return historyArticleRepositry.getAllArticles(uid);
     }

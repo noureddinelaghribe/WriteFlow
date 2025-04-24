@@ -9,6 +9,7 @@ public class Message {
         this.content = content;
     }
 
+
     // Getters and setters
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }

@@ -27,26 +27,17 @@ import com.noureddine.WriteFlow.activities.AuthActivity;
 
 public class ResetPasswordFragment extends Fragment {
 
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    FirebaseAuth auth;
-    EditText email ;
-    TextView login ;
-    Button sendLink ;
-    DialogLoading dialogLoading;
+    private FirebaseAuth auth;
+    private EditText email ;
+    private TextView login ;
+    private Button sendLink ;
+    private DialogLoading dialogLoading;
 
     public ResetPasswordFragment() {}
 
-    public static ResetPasswordFragment newInstance(String param1, String param2) {
+    public static ResetPasswordFragment newInstance() {
         ResetPasswordFragment fragment = new ResetPasswordFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,10 +45,6 @@ public class ResetPasswordFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @SuppressLint("MissingInflatedId")

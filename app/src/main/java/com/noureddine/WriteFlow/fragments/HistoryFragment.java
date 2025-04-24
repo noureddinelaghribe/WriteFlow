@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -41,13 +42,13 @@ import java.util.List;
 
 public class HistoryFragment extends Fragment {
 
-    ViewPager2 viewPager;
-    LinearLayout linearLayoutUpgrade ;
-    Button upgradeButton ;
-    RecyclerView recyclerView ;
-    EncryptedPrefsManager prefs;
-    User user;
-    HistoryArticleViewModel historyArticleViewModel;
+    private ViewPager2 viewPager;
+    private LinearLayout linearLayoutUpgrade ;
+    private Button upgradeButton ;
+    private RecyclerView recyclerView ;
+    private EncryptedPrefsManager prefs;
+    private User user;
+    private HistoryArticleViewModel historyArticleViewModel;
 
     public HistoryFragment() {}
 
@@ -77,6 +78,14 @@ public class HistoryFragment extends Fragment {
         prefs = EncryptedPrefsManager.getInstance(getContext());
         historyArticleViewModel = new HistoryArticleViewModel(getActivity().getApplication());
         initUI();
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                viewPager = requireActivity().findViewById(R.id.viwepager);
+                viewPager.setCurrentItem(0, true);
+            }
+        });
 
         upgradeButton.setOnClickListener(new View.OnClickListener() {
             @Override

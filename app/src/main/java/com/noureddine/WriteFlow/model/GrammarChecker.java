@@ -45,8 +45,8 @@ import android.os.Parcelable;
 
 public class GrammarChecker implements Parcelable {
 
-    String text;
-    String issue;
+    private String text;
+    private String issue;
 
     public GrammarChecker() {}
 

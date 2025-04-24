@@ -2,9 +2,12 @@ package com.noureddine.WriteFlow.fragments;
 
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.FREE_PLAN_NAME;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,15 +37,14 @@ import java.util.List;
 
 public class ToolsFragment extends Fragment {
 
-    List<Tool> toolList ;
-    RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
-    ViewPager2 viewPager;
-    LinearLayout linearLayoutUpgrade,linearLayoutPremium ;
-    Button upgradeButton ;
-    EncryptedPrefsManager prefs;
-    User user;
-
+    private List<Tool> toolList ;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private ViewPager2 viewPager;
+    private LinearLayout linearLayoutUpgrade,linearLayoutPremium ;
+    private Button upgradeButton ;
+    private EncryptedPrefsManager prefs;
+    private User user;
 
 
     public ToolsFragment() {}
@@ -58,6 +61,7 @@ public class ToolsFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("FragmentBackPressedCallback")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -78,10 +82,10 @@ public class ToolsFragment extends Fragment {
         toolList.add(new Tool(R.drawable.paraphraser,"Paraphraser / Rewriting"));
         toolList.add(new Tool(R.drawable.grammar,"Grammar Checker"));
         toolList.add(new Tool(R.drawable.robot,"AI Detector"));
-        //toolList.add(new Tool(R.drawable.translation,"Translation"));
         toolList.add(new Tool(R.drawable.writing,"Paragraph Generator"));
         toolList.add(new Tool(R.drawable.summarizer,"Summarizer"));
         toolList.add(new Tool(R.drawable.text,"Text Tools"));
+        //toolList.add(new Tool(R.drawable.translation,"Translation"));
 
         // Get the ViewPager2 from the activity
         HomeActivity activity = (HomeActivity) getActivity();
@@ -93,15 +97,37 @@ public class ToolsFragment extends Fragment {
             public void OnClick(Tool tool) {
                 Intent intent;
                 if (tool.getText().equals("Text Tools")){
-                    intent = new Intent(getContext(), TextToolActivity.class);
+                    if (user.getMembership().equals(FREE_PLAN_NAME)){
+                        Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
+                        viewPager = requireActivity().findViewById(R.id.viwepager);
+                        viewPager.setCurrentItem(2, true);
+                    }else {
+                        intent = new Intent(getContext(), TextToolActivity.class);
+                        getContext().startActivity(intent);
+                    }
                 }else {
-                    intent = new Intent(getContext(), ProcessingWordActivity.class);
-                    intent.putExtra("type",tool.getText());
+                    if (user.getMembership().equals(FREE_PLAN_NAME) && tool.getText().equals("Paragraph Generator")){
+                        Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
+                        viewPager = requireActivity().findViewById(R.id.viwepager);
+                        viewPager.setCurrentItem(2, true);
+                    }else {
+                        intent = new Intent(getContext(), ProcessingWordActivity.class);
+                        intent.putExtra("type",tool.getText());
+                        getContext().startActivity(intent);
+                    }
                 }
-                getContext().startActivity(intent);
+
             }
         });
         recyclerView.setAdapter(adapter);
+
+        // Enable back button handling for this fragment
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showExitConfirmationDialog();
+            }
+        });
 
         upgradeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,4 +166,20 @@ public class ToolsFragment extends Fragment {
     }
 
 
+    private void showExitConfirmationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Exit WordLoom")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Close the entire activity
+                    requireActivity().finish();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // Dismiss the dialog, do nothing
+                    dialog.dismiss();
+                })
+                .setCancelable(true)
+                .show();
     }
+
+}

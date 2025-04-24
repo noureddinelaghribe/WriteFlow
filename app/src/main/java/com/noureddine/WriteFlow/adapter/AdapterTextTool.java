@@ -17,8 +17,8 @@ import java.util.List;
 
 public class AdapterTextTool extends RecyclerView.Adapter<AdapterTextTool.ViweHolder>{
 
-    List<TextTool> toolList = new ArrayList<>();
-    setOnClickListenerTextTool setOnClickListenerTextTool;
+    private List<TextTool> toolList = new ArrayList<>();
+    private setOnClickListenerTextTool setOnClickListenerTextTool;
 
     public AdapterTextTool(List<TextTool> toolList, AdapterTextTool.setOnClickListenerTextTool setOnClickListenerTextTool) {
         this.toolList = toolList;

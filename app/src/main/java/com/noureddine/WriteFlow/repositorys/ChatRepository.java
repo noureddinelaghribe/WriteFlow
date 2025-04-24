@@ -1,15 +1,19 @@
 package com.noureddine.WriteFlow.repositorys;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.noureddine.WriteFlow.Utils.EncryptionManager;
 import com.noureddine.WriteFlow.interfaces.OpenAIService;
 import com.noureddine.WriteFlow.model.ChatRequest;
 import com.noureddine.WriteFlow.model.ChatResponse;
 import com.noureddine.WriteFlow.model.Message;
 import com.noureddine.WriteFlow.model.TypeProcessing;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -23,14 +27,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // ChatRepository.java
 public class ChatRepository {
     private static final String BASE_URL = "https://api.openai.com/v1/";
-    private static final String API_KEY = ""; // Store securely
-    private final OpenAIService openAIService;
+    private static String API_KEY = EncryptionManager.decryptText("7J/DMtd/WbxPlK9BwGbI6tqAgY3ePs5geoyKfPAD2KQ1yp9uYGj9tFZW4H7UjrSfzeNb69HTHYEIpSMj1suURz/JYOBlLoXch88ZB0LjEShbJQ1aU6GfEN8AX2Jw6s8wq583o7Vxs/l9zDRRUzcYEK0c1W2VjF2UJ7C/+tEqMRbVJaZCUwIU4WxtgokmsD6Mgmq3VRFPmNdrk/bGQRyjgOfMzgjtaBxH6Lq27wkH9cU="); // Store securely
+    private OpenAIService openAIService;
+
 
     public ChatRepository() {
 //        OkHttpClient client = new OkHttpClient.Builder()
 //                .addInterceptor(new HttpLoggingInterceptor()
 //                        .setLevel(HttpLoggingInterceptor.Level.BODY))
 //                .build();
+
+        Log.d("TAG", "ChatRepository: "+ EncryptionManager.encryptText("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"));
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HttpLoggingInterceptor()
@@ -214,7 +221,7 @@ public class ChatRepository {
                                 !response.body().getChoices().isEmpty()) {
 
                             String responseMessage = response.body().getChoices().get(0).getMessage().getContent();
-                            Log.d("TAG", "onResponse: "+response.body().getUsage().getTotal_tokens());
+                            Log.d("TAG", "onResponse openai : "+response.body().getUsage().getTotal_tokens());
 
                             callback.onSuccess(responseMessage);
                         } else {
@@ -230,10 +237,35 @@ public class ChatRepository {
                 });
     }
 
-
-
     public interface ChatCallback {
         void onSuccess(String response);
         void onError(String errorMessage);
     }
+
+//    public static String getApiKey(Context context) {
+//        try {
+//            Properties properties = new Properties();
+//            FileInputStream inputStream = new FileInputStream(
+//                    new File(context.getFilesDir(), "../local.properties")
+//            );
+//            properties.load(inputStream);
+//            return properties.getProperty("API_KEY");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
+    public static String getApiKey(Context context) {
+        try {
+            Properties prop = new Properties();
+            prop.load(context.getAssets().open("local.properties"));
+            return prop.getProperty("API_KEY");
+        } catch (IOException e) {
+            Log.e("ApiKeyManager", "Error reading API key", e);
+            return null;
+        }
+    }
+
 }
+

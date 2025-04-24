@@ -287,12 +287,16 @@ public class HistoryArticle implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     int id;
-    String uid;
-    String response;
-    String article; // ai detector // grammer check
-    String type;
-    long date;
-    GrammarChecker grammarChecker; // Ensure GrammarChecker is Parcelable
+    private String uid;
+    private String response;
+    private String article; // ai detector // grammer check
+    private String type;
+    private long date;
+    private GrammarChecker grammarChecker; // Ensure GrammarChecker is Parcelable
+
+    private String operatorStr1 ;
+    private String operatorStr2 ;
+    private int optionSpinner;
 
     public HistoryArticle() {}
 
@@ -319,6 +323,29 @@ public class HistoryArticle implements Parcelable {
         this.date = date;
     }
 
+    public HistoryArticle(String uid, String response, String article, String type, long date, String operatorStr1, String operatorStr2, int optionSpinner) {
+        this.uid = uid;
+        this.response = response;
+        this.article = article;
+        this.type = type;
+        this.date = date;
+        this.operatorStr1 = operatorStr1;
+        this.operatorStr2 = operatorStr2;
+        this.optionSpinner = optionSpinner;
+    }
+
+    public HistoryArticle(int id, String uid, String response, String article, String type, long date, String operatorStr1, String operatorStr2, int optionSpinner) {
+        this.id = id;
+        this.uid = uid;
+        this.response = response;
+        this.article = article;
+        this.type = type;
+        this.date = date;
+        this.operatorStr1 = operatorStr1;
+        this.operatorStr2 = operatorStr2;
+        this.optionSpinner = optionSpinner;
+    }
+
     // Constructor to recreate object from Parcel
     protected HistoryArticle(Parcel in) {
         id = in.readInt();
@@ -328,6 +355,9 @@ public class HistoryArticle implements Parcelable {
         type = in.readString();
         date = in.readLong();
         grammarChecker = in.readParcelable(GrammarChecker.class.getClassLoader());
+        operatorStr1 = in.readString();
+        operatorStr2 = in.readString();
+        optionSpinner = in.readInt();
     }
 
     public String getResponse() {
@@ -390,6 +420,30 @@ public class HistoryArticle implements Parcelable {
         this.grammarChecker = grammarChecker;
     }
 
+    public String getOperatorStr1() {
+        return operatorStr1;
+    }
+
+    public void setOperatorStr1(String operatorStr1) {
+        this.operatorStr1 = operatorStr1;
+    }
+
+    public int getOptionSpinner() {
+        return optionSpinner;
+    }
+
+    public void setOptionSpinner(int optionSpinner) {
+        this.optionSpinner = optionSpinner;
+    }
+
+    public String getOperatorStr2() {
+        return operatorStr2;
+    }
+
+    public void setOperatorStr2(String operatorStr2) {
+        this.operatorStr2 = operatorStr2;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -404,6 +458,10 @@ public class HistoryArticle implements Parcelable {
         parcel.writeString(type);
         parcel.writeLong(date);
         parcel.writeParcelable(grammarChecker, flags);
+        parcel.writeString(operatorStr1);
+        parcel.writeString(operatorStr2);
+        parcel.writeInt(optionSpinner);
+
     }
 
     public static final Creator<HistoryArticle> CREATOR = new Creator<HistoryArticle>() {

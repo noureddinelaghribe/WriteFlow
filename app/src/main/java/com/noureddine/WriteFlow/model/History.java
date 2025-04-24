@@ -2,8 +2,8 @@ package com.noureddine.WriteFlow.model;
 
 public class History {
 
-    String date;
-    String text;
+    private String date;
+    private String text;
 
     public History() {}
 

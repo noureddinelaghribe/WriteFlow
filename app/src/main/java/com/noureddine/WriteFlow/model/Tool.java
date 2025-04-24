@@ -1,8 +1,8 @@
 package com.noureddine.WriteFlow.model;
 
 public class Tool {
-    int img;
-    String text;
+    private int img;
+    private String text;
 
     public Tool(int img, String text) {
         this.img = img;

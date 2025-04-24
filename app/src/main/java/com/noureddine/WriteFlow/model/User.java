@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    String name;
-    String email;
-    String uid;
-    String membership;
-    long endSubscription;
-    long wordPremium;
-    long wordProcessing;
+    private String name;
+    private String email;
+    private String uid;
+    private String membership;
+    private long endSubscription;
+    private long wordPremium;
+    private long wordProcessing;
 //    String plane;
 
 

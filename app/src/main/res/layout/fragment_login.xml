@@ -22,7 +22,7 @@
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log in to your WriteFlow account"
+            android:text="Log in to your WordLoom account"
             android:textColor="@color/c4"
             android:textSize="16sp"
             android:textStyle="bold"/>
@@ -121,13 +121,14 @@
             android:text="By continuing, you agree to Terms of Service and have read our " />
 
         <TextView
+            android:id="@+id/textView19"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:textSize="10sp"
             android:gravity="center"
+            android:text="Privacy Prolicy"
             android:textColor="@color/c7"
-            android:text="Privacy Prolicy" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 

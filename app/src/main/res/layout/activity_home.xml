@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="WriteFlow"
+                android:text="WordLoom"
                 android:textColor="@color/c4"
                 android:textSize="18dp"
                 android:textStyle="bold" />
@@ -73,6 +73,13 @@
                     android:layout_height="wrap_content"
                     android:icon="@drawable/home_selected"
                     android:text="Home" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_settimg2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/history_unselected"
+                    android:text="HISTORY" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_subscribe"

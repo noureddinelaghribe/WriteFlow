@@ -39,18 +39,6 @@ public class AuthActivity extends AppCompatActivity {
                     .commit();
         }
 
-//        if (getIntent().getStringExtra("re-sign") == null) {
-//            // عرض شاشة الدخول عند بدء التطبيق
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.auth_container, new RegisterFragment())
-//                    .commit();
-//        }else {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.auth_container, new LoginFragment())
-//                    .commit();
-//        }
-
-
 
     }
 
