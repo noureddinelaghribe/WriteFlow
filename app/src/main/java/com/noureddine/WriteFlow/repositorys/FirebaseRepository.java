@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.noureddine.WriteFlow.Utils.EncryptedPrefsManager;
+import com.noureddine.WriteFlow.Utils.EncryptionManager;
 import com.noureddine.WriteFlow.model.HistoryArticle;
 import com.noureddine.WriteFlow.model.User;
 
@@ -27,6 +28,7 @@ public class FirebaseRepository {
 
     // Save a simple key-value pair to the DatabaseArticle
     public void saveUser(User user) {
+//        databaseReference.child(EncryptionManager.encryptText("Users")).child(EncryptionManager.encryptText(prefs.getUser().getUid())).setValue(EncryptionManager.encryptUser(user))
         databaseReference.child("Users").child(prefs.getUser().getUid()).setValue(user)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Data saved successfully for key: " + prefs.getUser().getUid());

@@ -158,8 +158,8 @@ public class RegisterFragment extends Fragment {
 
                             prefs.saveUser(new User(sName,sEmail,auth.getUid(),FREE_PLAN_NAME,0,0,0));
                             firebaseRepository.saveUser(new User(sName,sEmail,auth.getUid(),FREE_PLAN_NAME,0,0,0));
-                            ((AuthActivity) getActivity()).toHome();
-                            getActivity().finish();
+                            //((AuthActivity) getActivity()).toHome();
+                            //getActivity().finish();
 
                         } else {
                             // Registration failed

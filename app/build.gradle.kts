@@ -13,8 +13,8 @@ android {
         applicationId = "com.noureddine.WriteFlow"
         minSdk = 28
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -27,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -53,20 +54,8 @@ dependencies {
 
     implementation ("com.unity3d.ads:unity-ads:4.9.2")
 
-    //Espresso
-    implementation ("androidx.test.espresso:espresso-core:3.5.1")
-    implementation ("androidx.test:runner:1.5.2")
-    implementation ("androidx.test:rules:1.5.0")
-
     //inapp billing
     implementation ("com.android.billingclient:billing:6.1.0")
-
-    // Espresso
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.6.1")
-    androidTestImplementation ("androidx.test:runner:1.5.2")
-    androidTestImplementation ("androidx.test:rules:1.5.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
 
     // ViewModel and LiveData
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")

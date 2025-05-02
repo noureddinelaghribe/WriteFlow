@@ -22,4 +22,5 @@ public class RemoveOutsideBraces {
         return result.toString();
     }
 
+
 }
