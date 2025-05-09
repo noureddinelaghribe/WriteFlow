@@ -2,6 +2,14 @@
 
 Welcome to **WriteFlow**, your comprehensive writing assistant application! This app provides powerful AI-driven tools to enhance your writing experience with features like paraphrasing, grammar checking, and content generation. Built for Android using Java, WriteFlow combines cutting-edge AI technology with a user-friendly interface.
 
+## Download
+
+<p align="center">
+    <a href="">
+        <img src="https://raw.githubusercontent.com/noureddinelaghribe/WriteFlow/refs/heads/main/download_apk.png" alt="Get it on Google Play" height="80">
+    </a>
+</p>
+
 ## Screenshots
 
 Here are some screenshots of the WriteFlow app:
