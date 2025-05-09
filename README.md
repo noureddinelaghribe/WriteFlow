@@ -5,7 +5,7 @@ Welcome to **WriteFlow**, your comprehensive writing assistant application! This
 ## Download
 
 <p align="center">
-    <a href="">
+    <a href="https://github.com/noureddinelaghribe/WriteFlow/raw/refs/heads/main/app/release/WriteFlow.apk">
         <img src="https://raw.githubusercontent.com/noureddinelaghribe/WriteFlow/refs/heads/main/download_apk.png" alt="Get it on Google Play" height="80">
     </a>
 </p>
