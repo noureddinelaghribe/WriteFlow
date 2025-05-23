@@ -12,7 +12,7 @@ Welcome to **WriteFlow**, your comprehensive writing assistant application! This
 
 ## Video 
 
-[![Watch the video](https://img.youtube.com/vi/5kuReJPleKQ/hqdefault.jpg)](https://www.youtube.com/watch?v=5kuReJPleKQ)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5kuReJPleKQ" frameborder="0" allowfullscreen></iframe>
                             
                             
 ## Screenshots
