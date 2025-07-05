@@ -6,6 +6,6 @@ import retrofit2.http.GET;
 
 
 public interface TimeApiService {
-    @GET("api/time/current/zone?timeZone=Europe%2FAmsterdam")
+    @GET("timestamp.php/")
     Call<TimeResponse> getTimeZone();
 }

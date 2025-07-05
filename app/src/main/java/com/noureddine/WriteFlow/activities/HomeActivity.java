@@ -5,12 +5,15 @@ import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.FREE_PLAN_PRO
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -194,6 +197,20 @@ public class HomeActivity extends AppCompatActivity {
 
                 initTime();
 
+
+
+//                // Use a Handler to delay the transition to the main activity
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        loadFragment();
+//                        dialogLoading.dismissLoadingProgressDialog();
+//
+//                    }
+//                }, 1000);
+
+
             }
 
             @Override
@@ -212,7 +229,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onChanged(TimeResponse response) {
                 if (response != null) {
-                    endSubscription = DataCoverter.dataToLong(response.getYear(),response.getMonth(),response.getDay(),response.getHour(),response.getMinute(),response.getSeconds());
+                    //endSubscription = DataCoverter.dataToLong(response.getYear(),response.getMonth(),response.getDay(),response.getHour(),response.getMinute(),response.getSeconds());
+                    endSubscription = response.getTimeUnix();
                     prefs.saveLong("currentTime",endSubscription);
                     Log.d(TAG, "onChanged: "+endSubscription);
                     if (prefs.getUser().getEndSubscription() <= endSubscription){

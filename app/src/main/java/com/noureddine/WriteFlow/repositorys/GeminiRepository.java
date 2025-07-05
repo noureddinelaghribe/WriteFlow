@@ -139,7 +139,8 @@ public class GeminiRepository {
             case "Summarizer":
 
                 Part systemPartS = new Part("### Instructions\n"+
-                                "1. **Act as an advanced summarizer** fluent in " + typeProcessing.getLanguage() + ".\n"+
+                        //"1. **Act as an advanced summarizer** fluent in " + typeProcessing.getLanguage() + ".\n"+
+                        "1. **Act as an advanced summarizer** fluent .\n"+
                                 "2. **Summarize the provided article** (10%-30% of the total words) into a concise, **human-written style** with the following requirements:\n"+
                                 "   - **Grammar**: Fix all errors to meet Grammarly standards <button class=citation-flag data-index=5><button class=citation-flag data-index=6>.\n"+
                                 "   - **Voice**: Convert all sentences to **active voice**.\n"+
@@ -192,7 +193,49 @@ public class GeminiRepository {
 
 
 
+    public void convertText2Html(String text, final Callback<GeminiResponse> callback){
 
+        Part systemPartPG = new Part("You are an expert in document formatting. Convert the following raw text into a complete, well-structured HTML5 document. Requirements:\n" +
+                "\n" +
+                "1. Use heading tags `<h1>` through `<h6>` according to hierarchical structure with automatic numbering (1, 1.1, 1.1.1, etc.).\n" +
+                "2. Convert numbered lists to `<ol>` elements and bullet points to `<ul>` elements.\n" +
+                "3. Wrap each paragraph in `<p>` tags.\n" +
+                "3. Set padding 1 rem.\n" +
+                "4. Add an automatically generated table of contents at the beginning of the document under title using <nav> or <ol> based on the headings.\n" +
+//                "5. Set the document language to Arabic with `lang=\"ar\"` and text direction to right-to-left with `dir=\"rtl\"`.\n" +
+                "5.Set the document’s lang attribute to match its language (for example, lang=\"ar\" for Arabic, lang=\"en\" for English, etc.) and configure the text direction accordingly: use dir=\"rtl\" for Arabic (and any other right‑to‑left language) or dir=\"ltr\" for all left‑to‑right languages.\n" +
+                "6. Ensure valid HTML5 structure (include `<!DOCTYPE html>`, `<head>` with `<meta charset=\"utf-8\">`, and appropriate `<title>` tag).\n" +
+                "7. **CRITICAL:** Provide ONLY the raw HTML code without any explanatory text, comments, or markdown formatting. \n" +
+                "   - DO NOT wrap the output in ```html code blocks\n" +
+                "   - DO NOT use any markdown formatting \n" +
+                "   - DO NOT add any text before or after the HTML\n" +
+                "   - Return the HTML code directly starting with <!DOCTYPE html> and ending with </html>\n" +
+                "   - The response should be pure HTML that can be copied and pasted directly into an .html file\n" +
+                "\n" +
+                "Raw text:\n" +
+                "---\n" +
+                "{{RAW_TEXT}}");
+
+        systemParts = new ArrayList<>();
+        systemParts.add(systemPartPG);
+        sysInstruction = new SystemInstruction(systemParts);
+
+        // Create parts for user content
+        Part userPart = new Part(text);
+        List<Part> userParts = new ArrayList<>();
+        userParts.add(userPart);
+
+        // Create content
+        Content content = new Content(userParts, "user");
+        List<Content> contents = new ArrayList<>();
+        contents.add(content);
+
+        // Create full request
+        GeminiRequest request = new GeminiRequest(sysInstruction, contents);
+
+        apiService.generateContent(apiKey, request).enqueue(callback);
+
+    }
 
 
 

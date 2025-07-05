@@ -15,7 +15,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TimeRepository {
-    private static final String BASE_URL = "https://timeapi.io/";
+//    private static final String BASE_URL = "https://timeapi.io/";
+    private static final String BASE_URL = "https://neoiptv-uk.com/";
     private TimeApiService apiService;
     private static TimeRepository instance;
 
@@ -50,7 +51,7 @@ public class TimeRepository {
             public void onFailure(Call<TimeResponse> call, Throwable t) {
                 // Handle error here (you can post a null or use another LiveData for errors)
                 data.postValue(null);
-                Log.d("TimeRepository", "onResponse: "+t.getMessage());
+                Log.d("TimeRepository", "onResponse onFailure : "+t.getMessage());
             }
         });
         return data;

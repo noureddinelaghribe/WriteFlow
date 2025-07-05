@@ -8,19 +8,26 @@ public class SubscriptionConstants {
     public static final int BASIC_PLAN_PROCESS_LIMIT = 800_000;
     public static final String BASIC_PLAN_NAME = "Basic Plan";
     public static final String BASIC_PLAN_ID = "basic_subscribe";
+    public static final String BASIC_PLAN_LINK_PAY = "https://www.paypal.com/ncp/payment/YM2E8X6H28XN8";
+    public static final String BASIC_PLAN_LINK_CHECK = "https://example.com/verify?token=fGPNJXSuqVVo";
 
     public static final int PRO_PLAN_PROCESS_LIMIT = 2_500_000;
     public static final String PRO_PLAN_NAME = "Pro Plan";
     public static final String PRO_PLAN_ID = "pro_subscribe";
+    public static final String PRO_PLAN_LINK_PAY = "https://www.paypal.com/ncp/payment/BD6SJF56CY9ZW";
+    public static final String PRO_PLAN_LINK_CHECK = "https://example.com/verify?token=xexGeuqqTosx";
 
     public static final int BASIC_PROCESS_LIMIT = 100_000;
     public static final String BASIC_NAME = "Basic Processing";
     public static final String BASIC_ID = "basic_word_processing";
+    public static final String BASIC_PROCESS_LINK_PAY = "https://www.paypal.com/ncp/payment/QQKSNGTZTER6A";
+    public static final String BASIC_PROCESS_LINK_CHECK = "https://example.com/verify?token=nlVdGbyDb";
 
     public static final int PRO_PROCESS_LIMIT = 1_500_000;
     public static final String PRO_NAME = "Pro Processing";
     public static final String PRO_ID = "pro_word_processing";
-
+    public static final String PRO_PROCESS_LINK_PAY = "https://www.paypal.com/ncp/payment/Y37AG3QSK25CG";
+    public static final String PRO_PROCESS_LINK_CHECK = "https://example.com/verify?token=eyJhbGc";
 
 
     public final static int wordLimitFreePlaneSummarizer = 200;

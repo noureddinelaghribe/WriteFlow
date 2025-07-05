@@ -361,7 +361,7 @@
                         android:drawableRight="@drawable/right_arrow"
                         android:padding="8dp"
                         android:textColor="@color/c4"
-                        android:text="Rate us on google play"
+                        android:text="Share the app with friends"
                         android:textStyle="bold" />
 
                     <TextView

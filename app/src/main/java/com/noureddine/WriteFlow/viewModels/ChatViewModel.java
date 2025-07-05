@@ -62,4 +62,25 @@ public class ChatViewModel extends ViewModel {
             }
         });
     }
-}
+
+    public void convertText2Html(String text){
+
+        loadingLiveData.setValue(true);
+
+        repository.convertText2Html(text, new ChatRepository.ChatCallback() {
+            @Override
+            public void onSuccess(String response) {
+                responseLiveData.postValue(response);
+                loadingLiveData.postValue(false);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                errorLiveData.postValue(errorMessage);
+                loadingLiveData.postValue(false);
+            }
+        });
+
+    }
+
+    }

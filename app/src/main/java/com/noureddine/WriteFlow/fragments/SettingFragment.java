@@ -8,6 +8,7 @@ import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.PRO_PLAN_NAME
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.PRO_PLAN_PROCESS_LIMIT;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,6 +34,7 @@ import com.noureddine.WriteFlow.Utils.DataCoverter;
 import com.noureddine.WriteFlow.Utils.EncryptedPrefsManager;
 import com.noureddine.WriteFlow.Utils.NumberFormat;
 import com.noureddine.WriteFlow.activities.HomeActivity;
+import com.noureddine.WriteFlow.model.Update;
 import com.noureddine.WriteFlow.model.User;
 import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 
@@ -41,7 +45,7 @@ public class SettingFragment extends Fragment {
     private ViewPager2 viewPager ;
     private LinearLayout linearLayoutUpgrade, linearLayoutPremium;
     private Button upgradeButton ;
-    private TextView rateGooglrPlay, privacyPolicy, ternsofservice, contactUs, name, email, membership, endSubscribtion, wordPremium, wordProcessing;
+    private TextView shareApp, privacyPolicy, ternsofservice, contactUs, name, email, membership, endSubscribtion, wordPremium, wordProcessing;
     private DataCoverter dataCoverter = new DataCoverter();
     private NumberFormat numberFormat = new NumberFormat();
     private EncryptedPrefsManager prefs;
@@ -71,7 +75,7 @@ public class SettingFragment extends Fragment {
         linearLayoutUpgrade = v.findViewById(R.id.linearLayoutUpgrade);
         linearLayoutPremium = v.findViewById(R.id.linearLayoutPremium);
         upgradeButton = v.findViewById(R.id.button3);
-        rateGooglrPlay = v.findViewById(R.id.textView13);
+        shareApp = v.findViewById(R.id.textView13);
         privacyPolicy = v.findViewById(R.id.textView14);
         ternsofservice = v.findViewById(R.id.textView15);
         contactUs = v.findViewById(R.id.textView19);
@@ -107,12 +111,18 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        rateGooglrPlay.setOnClickListener(new View.OnClickListener() {
+        shareApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://play.google.com/store/apps/details?id=com.noureddine.WriteFlow";
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
+
+
+                showShareDialog();
+
+
+//                String url = "https://play.google.com/store/apps/details?id=com.noureddine.WriteFlow";
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                startActivity(intent);
+
             }
         });
 
@@ -137,16 +147,10 @@ public class SettingFragment extends Fragment {
         contactUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String url = "https://link.com/";
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                startActivity(intent);
-
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                 emailIntent.setData(Uri.parse("mailto:")); // هذا يحدد أن النية لإرسال بريد إلكتروني فقط
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"WordLoom0@gmail.com"});
                 startActivity(emailIntent);
-
-
             }
         });
 
@@ -202,6 +206,42 @@ public class SettingFragment extends Fragment {
         }
 
         wordProcessing.setText(numberFormat.String(user.getWordProcessing())+" word");
+
+    }
+
+
+    @SuppressLint("MissingInflatedId")
+    private void showShareDialog() {
+
+        // Inflate the dialog layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_share_app, null);
+
+        // Get reference to the EditText in the dialog layout
+        final ImageView btnClose = dialogView.findViewById(R.id.imageViewClose);
+        final Button buttonCopyLink = dialogView.findViewById(R.id.buttonCopyLink);
+        final Button buttonShareNow = dialogView.findViewById(R.id.buttonShareNow);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();;
+
+
+        buttonCopyLink.setOnClickListener(V->{
+
+        });
+
+        buttonShareNow.setOnClickListener(V->{
+
+        });
+
+        btnClose.setOnClickListener(V->{
+            dialog.dismiss();
+        });
+
+        // Show the dialog
+        dialog.setCancelable(false);
+        dialog.show();
 
     }
 

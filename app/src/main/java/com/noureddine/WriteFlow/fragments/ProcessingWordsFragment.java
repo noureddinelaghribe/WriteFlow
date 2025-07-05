@@ -21,6 +21,7 @@ import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.wordLimitProP
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.wordLimitProPlaneParaphraserRewriting;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.wordLimitProPlaneSummarizer;
 import static com.noureddine.WriteFlow.Utils.TextProcessing.countWords;
+import static com.unity3d.scar.adapter.common.Utils.runOnUiThread;
 import static com.unity3d.services.core.properties.ClientProperties.getApplicationContext;
 
 import android.animation.ObjectAnimator;
@@ -61,9 +62,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.noureddine.WriteFlow.R;
 import com.noureddine.WriteFlow.Utils.CopySaveResult;
 import com.noureddine.WriteFlow.Utils.DialogLoading;
@@ -96,13 +94,14 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 
 public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitializationListener{
 
 
     private final String GAME_ID = "5817517";
-    private final boolean TEST_MODE = false; // Disable for production
+    private final boolean TEST_MODE = true; // Disable for production
 
     private String rewardedAdUnitId = "Rewarded_Android";
 
@@ -135,6 +134,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
     private HistoryArticle historyArticle = new HistoryArticle();
     private Bundle bundle;
     private CopySaveResult copySaveResult;
+
+    private static String TAG = "ProcessingWordsFragment";
 
     // Activity result launcher for regular storage permission
     private ActivityResultLauncher<String> requestPermissionLauncher =
@@ -293,6 +294,7 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                             }else {
                                 //show ads
                                 Toast.makeText(getContext(), "Show Ads", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onClick: Show Ads");
                                 pushToProcess();
                             }
                         }
@@ -424,6 +426,56 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
 
     }
 
+//    private void processData(){
+//        CountDownLatch latch1 = new CountDownLatch(1);
+//        CountDownLatch latch2 = new CountDownLatch(1);
+//
+//        Thread backgroundThread1 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d("TAG", "Load Data 1 - Start");
+//                try { Thread.sleep(2000); } catch (InterruptedException e) {}
+//                Log.d("TAG", "Load Data 1 - Finished");
+//                latch1.countDown(); // إشارة انتهاء data1
+//            }
+//        });
+//
+//        Thread backgroundThread2 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    latch1.await(); // انتظار data1
+//                    Log.d("TAG", "Load Data 2 - Start");
+//                    Thread.sleep(1500);
+//                    Log.d("TAG", "Load Data 2 - Finished");
+//                    latch2.countDown(); // إشارة انتهاء data2
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        Thread backgroundThread3 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    latch1.await(); // انتظار data1
+//                    latch2.await(); // انتظار data2
+//                    Log.d("TAG", "Load Data 3 - Start");
+//                    Thread.sleep(1000);
+//                    Log.d("TAG", "Load Data 3 - Finished");
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        backgroundThread1.start();
+//        backgroundThread2.start();
+//        backgroundThread3.start();
+//    }
+
+
     private void fetchOpenai() {
 
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getViewLifecycleOwner()).get(ChatViewModel.class);
@@ -501,7 +553,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                         models[spinnerMode.getSelectedItemPosition()],
                                         ""
                                 ));
-                                Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "pushToProcess: load openai");
                             }else if (prefs.getToolPreferences().getParaphraserModel().equals(modelAi[1])){
                                 geminiViewModel.generateContent(new TypeProcessing(
                                         text.getText().toString(),
@@ -511,6 +564,7 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                         ""
                                 ));
                                 Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "pushToProcess: load gemini");
                             }else {
                                 Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
                             }
@@ -533,7 +587,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                     "",
                                     ""
                             ));
-                            Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "pushToProcess: load openai");
                         }else if (prefs.getToolPreferences().getParagraphGeneratorModel().equals(modelAi[1])){
                             geminiViewModel.generateContent(new TypeProcessing(
                                     text.getText().toString(),
@@ -542,7 +597,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                     "",
                                     ""
                             ));
-                            Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "pushToProcess: load gemini");
                         }else {
                             Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
                         }
@@ -564,7 +620,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                     "",
                                     ""
                             ));
-                            Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "pushToProcess: load openai");
                         }else if (prefs.getToolPreferences().getAiDetectorModel().equals(modelAi[1])){
                             geminiViewModel.generateContent(new TypeProcessing(
                                     text.getText().toString(),
@@ -573,7 +630,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                     "",
                                     ""
                             ));
-                            Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "pushToProcess: load gemini");
                         }else {
                             Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
                         }
@@ -583,10 +641,9 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                     break;
                 case "Summarizer":
 
-                    if (spinnerLqnguqge.getSelectedItemPosition() == 0){
+                    if (spinnerLqnguqge.getSelectedItemPosition() == 0){//hhh
                         Toast.makeText(getContext(), "Please select a language.", Toast.LENGTH_SHORT).show();
                     }else {
-
                         if (prefs.getToolPreferences().getSummarizerModel().equals(modelAi[0])){
                             viewModel.sendMessage(new TypeProcessing(
                                     text.getText().toString(),
@@ -595,7 +652,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                     "",
                                     ""
                             ));
-                            Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "pushToProcess: load openai");
                         }else if (prefs.getToolPreferences().getSummarizerModel().equals(modelAi[1])){
                             geminiViewModel.generateContent(new TypeProcessing(
                                     text.getText().toString(),
@@ -604,7 +662,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                     "",
                                     ""
                             ));
-                            Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "pushToProcess: load gemini");
                         }else {
                             Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
                         }
@@ -630,7 +689,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                             models[spinnerMode.getSelectedItemPosition()],
                                             keyword.getText().toString())
                                     );
-                                    Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "load openai", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "pushToProcess: load openai");
                                 }else if (prefs.getToolPreferences().getParagraphGeneratorModel().equals(modelAi[1])){
                                     geminiViewModel.generateContent(new TypeProcessing(
                                             text.getText().toString(),
@@ -639,7 +699,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                                             models[spinnerMode.getSelectedItemPosition()],
                                             keyword.getText().toString())
                                     );
-                                    Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "load gemini", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "pushToProcess: load gemini");
                                 }else {
                                     Toast.makeText(getContext(), "Failed get Tool", Toast.LENGTH_SHORT).show();
                                 }
@@ -789,6 +850,8 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                 if ( !user.getMembership().equals(FREE_PLAN_NAME) && !(bundle.get("HistoryArticle") instanceof HistoryArticle) ){
                     historyArticleViewModel.insertArticle(new HistoryArticle( prefs.getUser().getUid(), response, type, System.currentTimeMillis()));
                     text.setText(response);
+                }else if( user.getMembership().equals(FREE_PLAN_NAME) && !(bundle.get("HistoryArticle") instanceof HistoryArticle) ){
+                    text.setText(response);
                 }else {
                     text.setText( ((HistoryArticle) bundle.get("HistoryArticle")).getResponse() );
                 }
@@ -871,7 +934,9 @@ public class ProcessingWordsFragment extends Fragment implements IUnityAdsInitia
                     // String uid,String response, String type, long date
                     historyArticleViewModel.insertArticle(new HistoryArticle( prefs.getUser().getUid(), response, type, System.currentTimeMillis()));
                     text.setText(response);
-                }else {
+                }else if(user.getMembership().equals(FREE_PLAN_NAME) && !(bundle.get("HistoryArticle") instanceof HistoryArticle)){
+                    text.setText(response);
+                }else{
                     text.setText( ((HistoryArticle) bundle.get("HistoryArticle")).getResponse() );
                 }
 

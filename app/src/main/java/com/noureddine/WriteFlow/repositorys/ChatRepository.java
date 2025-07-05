@@ -2,12 +2,18 @@ package com.noureddine.WriteFlow.repositorys;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.noureddine.WriteFlow.Utils.EncryptionManager;
 import com.noureddine.WriteFlow.interfaces.OpenAIService;
 import com.noureddine.WriteFlow.model.ChatRequest;
 import com.noureddine.WriteFlow.model.ChatResponse;
+import com.noureddine.WriteFlow.model.Content;
+import com.noureddine.WriteFlow.model.GeminiRequest;
+import com.noureddine.WriteFlow.model.GeminiResponse;
 import com.noureddine.WriteFlow.model.Message;
+import com.noureddine.WriteFlow.model.Part;
+import com.noureddine.WriteFlow.model.SystemInstruction;
 import com.noureddine.WriteFlow.model.TypeProcessing;
 
 import java.io.IOException;
@@ -27,7 +33,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // ChatRepository.java
 public class ChatRepository {
     private static final String BASE_URL = "https://api.openai.com/v1/";
-    private static String API_KEY = EncryptionManager.decryptText("7J/DMtd/WbxPlK9BwGbI6tqAgY3ePs5geoyKfPAD2KQ1yp9uYGj9tFZW4H7UjrSfzeNb69HTHYEIpSMj1suURz/JYOBlLoXch88ZB0LjEShbJQ1aU6GfEN8AX2Jw6s8wq583o7Vxs/l9zDRRUzcYEK0c1W2VjF2UJ7C/+tEqMRbVJaZCUwIU4WxtgokmsD6Mgmq3VRFPmNdrk/bGQRyjgOfMzgjtaBxH6Lq27wkH9cU="); // Store securely
+//    private static String API_KEY = EncryptionManager.decryptText("7J/DMtd/WbxPlK9BwGbI6tqAgY3ePs5geoyKfPAD2KQ1yp9uYGj9tFZW4H7UjrSfzeNb69HTHYEIpSMj1suURz/JYOBlLoXch88ZB0LjEShbJQ1aU6GfEN8AX2Jw6s8wq583o7Vxs/l9zDRRUzcYEK0c1W2VjF2UJ7C/+tEqMRbVJaZCUwIU4WxtgokmsD6Mgmq3VRFPmNdrk/bGQRyjgOfMzgjtaBxH6Lq27wkH9cU="); // Store securely
+    //private static String API_KEY = "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"; // Store securely
     private OpenAIService openAIService;
 
 
@@ -175,9 +182,12 @@ public class ChatRepository {
             case "Summarizer":
 //                messages.add(new Message("system", "Act as an advanced summarizer I want you to respond only in "+typeProcessing.getLanguage()+". Your task is to summarize the given article. The article must be 300 to 2500 words. Article must be 100% human writing style, fix grammar issues and change to active voice. Do not accept any other type of request."));
 
+                Log.d("ChatRepository", "sendTodo: Summarizer "+typeProcessing.getLanguage());
+
                 messages.add(new Message("system",
                         "### Instructions\n"+
-                                "1. **Act as an advanced summarizer** fluent in " + typeProcessing.getLanguage() + ".\n"+
+                                //"1. **Act as an advanced summarizer** fluent in " + typeProcessing.getLanguage() + ".\n"+
+                                "1. **Act as an advanced summarizer** fluent.\n"+
                                 "2. **Summarize the provided article** (10%-30% of the total words) into a concise, **human-written style** with the following requirements:\n"+
                                 "   - **Grammar**: Fix all errors to meet Grammarly standards <button class=citation-flag data-index=5><button class=citation-flag data-index=6>.\n"+
                         "   - **Voice**: Convert all sentences to **active voice**.\n"+
@@ -200,7 +210,7 @@ public class ChatRepository {
                                 "- No filler content"+
 
                                 "### Example format:\n"+
-                        "[ملخص النص هنا باللغة المطلوبة]\n"+
+                        "[ملخص النص هنا]\n"+
                         "DO NOT EXPLAIN PROCESS OR ADD UNREQUESTED CONTENT."));
 
                 break;
@@ -267,5 +277,61 @@ public class ChatRepository {
         }
     }
 
-}
+
+
+    public void convertText2Html(String text, ChatCallback callback){
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message("system", "You are an expert in document formatting. Convert the following raw text into a complete, well-structured HTML5 document. Requirements:\n" +
+                "\n" +
+                "1. Use heading tags `<h1>` through `<h6>` according to hierarchical structure with automatic numbering (1, 1.1, 1.1.1, etc.).\n" +
+                "2. Convert numbered lists to `<ol>` elements and bullet points to `<ul>` elements.\n" +
+                "3. Wrap each paragraph in `<p>` tags.\n" +
+                "3. Set padding 1 rem.\n" +
+                "4. Add an automatically generated table of contents at the beginning of the document under title using <nav> or <ol> based on the headings.\n" +
+                "5. Set the document’s lang attribute to match its language (for example, lang=\"ar\" for Arabic, lang=\"en\" for English, etc.) and configure the text direction accordingly: use dir=\"rtl\" for Arabic (and any other right‑to‑left language) or dir=\"ltr\" for all left‑to‑right languages.\n" +
+                "6. Ensure valid HTML5 structure (include `<!DOCTYPE html>`, `<head>` with `<meta charset=\"utf-8\">`, and appropriate `<title>` tag).\n" +
+                "7. **CRITICAL:** Provide ONLY the raw HTML code without any explanatory text, comments, or markdown formatting. \n" +
+                "   - DO NOT wrap the output in ```html code blocks\n" +
+                "   - DO NOT use any markdown formatting \n" +
+                "   - DO NOT add any text before or after the HTML\n" +
+                "   - Return the HTML code directly starting with <!DOCTYPE html> and ending with </html>\n" +
+                "   - The response should be pure HTML that can be copied and pasted directly into an .html file\n" +
+                "\n" +
+                "Raw text:\n" +
+                "---\n" +
+                "{{RAW_TEXT}}"));
+
+        messages.add(new Message("user", text));
+
+        ChatRequest request = new ChatRequest(messages);
+
+        openAIService.createChatCompletion("Bearer " + API_KEY, request)
+                .enqueue(new Callback<ChatResponse>() {
+                    @Override
+                    public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
+                        if (response.isSuccessful() && response.body() != null &&
+                                response.body().getChoices() != null &&
+                                !response.body().getChoices().isEmpty()) {
+
+                            String responseMessage = response.body().getChoices().get(0).getMessage().getContent();
+                            Log.d("TAG", "onResponse openai : "+responseMessage);
+                            Log.d("TAG", "onResponse openai : "+response.body().getUsage().getTotal_tokens());
+
+                            callback.onSuccess(responseMessage);
+                        } else {
+                            callback.onError("Error: " + (response.errorBody() != null ? response.errorBody().toString() : "Unknown error"));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ChatResponse> call, Throwable t) {
+                        //callback.onError("Network Error: " + t.getMessage());
+                    }
+                });
+    }
+
+
+
+    }
 

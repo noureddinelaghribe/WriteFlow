@@ -13,8 +13,8 @@ android {
         applicationId = "com.noureddine.WriteFlow"
         minSdk = 28
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,9 +62,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-ktx:1.8.0")
+
     implementation("org.apache.poi:poi:5.2.3")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
+
     implementation("com.itextpdf:itextpdf:5.5.13.3")
+    implementation("com.ibm.icu:icu4j:73.2")
+
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.android.gms:play-services-auth:21.1.0")
