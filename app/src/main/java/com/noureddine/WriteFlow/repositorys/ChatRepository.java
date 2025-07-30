@@ -13,6 +13,7 @@ import com.noureddine.WriteFlow.model.GeminiRequest;
 import com.noureddine.WriteFlow.model.GeminiResponse;
 import com.noureddine.WriteFlow.model.Message;
 import com.noureddine.WriteFlow.model.Part;
+import com.noureddine.WriteFlow.model.ResultApi;
 import com.noureddine.WriteFlow.model.SystemInstruction;
 import com.noureddine.WriteFlow.model.TypeProcessing;
 
@@ -34,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ChatRepository {
     private static final String BASE_URL = "https://api.openai.com/v1/";
 //    private static String API_KEY = EncryptionManager.decryptText("7J/DMtd/WbxPlK9BwGbI6tqAgY3ePs5geoyKfPAD2KQ1yp9uYGj9tFZW4H7UjrSfzeNb69HTHYEIpSMj1suURz/JYOBlLoXch88ZB0LjEShbJQ1aU6GfEN8AX2Jw6s8wq583o7Vxs/l9zDRRUzcYEK0c1W2VjF2UJ7C/+tEqMRbVJaZCUwIU4WxtgokmsD6Mgmq3VRFPmNdrk/bGQRyjgOfMzgjtaBxH6Lq27wkH9cU="); // Store securely
-    //private static String API_KEY = "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"; // Store securely
+    private static String API_KEY = "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"; // Store securely
     private OpenAIService openAIService;
 
 
@@ -180,9 +181,6 @@ public class ChatRepository {
 
                 break;
             case "Summarizer":
-//                messages.add(new Message("system", "Act as an advanced summarizer I want you to respond only in "+typeProcessing.getLanguage()+". Your task is to summarize the given article. The article must be 300 to 2500 words. Article must be 100% human writing style, fix grammar issues and change to active voice. Do not accept any other type of request."));
-
-                Log.d("ChatRepository", "sendTodo: Summarizer "+typeProcessing.getLanguage());
 
                 messages.add(new Message("system",
                         "### Instructions\n"+
@@ -214,6 +212,50 @@ public class ChatRepository {
                         "DO NOT EXPLAIN PROCESS OR ADD UNREQUESTED CONTENT."));
 
                 break;
+            case "Smart Translation":
+
+                messages.add(new Message("system",
+                        "### Instructions\n"+
+                                "1. **Act as an advanced translator** with native-level fluency in both source and target languages.\n"+
+                                "2. **Translate the provided text** with the following requirements:\n"+
+                                "   - **Accuracy**: Maintain 100% semantic fidelity to the original meaning.\n"+
+                                "   - **Naturalness**: Produce idiomatic, native-sounding output in the target language.\n"+
+                                "   - **Context**: Preserve tone, register, and cultural nuances appropriately.\n"+
+                                "   - **Terminology**: Use consistent, domain-appropriate vocabulary throughout.\n"+
+                                "3. **Output format**:\n"+
+                                "   - Provide only the translated text.\n"+
+                                "   - No explanations, notes, or extra commentary.\n"+
+                                "4. **Focus solely on translation**: Do not accept other requests or modifications.\n"+
+
+                                "Quality Standards:\n" +
+                                "- Preserve original sentence structure when natural\n" +
+                                "- Adapt cultural references for target audience\n" +
+                                "- Maintain formal/informal register consistency\n" +
+                                "- Handle idioms and metaphors contextually\n\n" +
+
+                                "Strict Prohibitions:\n" +
+                                "- No literal word-for-word translations\n" +
+                                "- No added interpretations or explanations\n" +
+                                "- No formatting changes unless required by target language"+
+
+                                "### Example format:\n"+
+                                "[النص المترجم هنا]\n"+
+                                "DO NOT EXPLAIN PROCESS OR ADD UNREQUESTED CONTENT."));
+
+                break;
+            case "Plagiarism Checking":
+                messages.add(new Message("system",
+                        "Act as an advanced Plagiarism Checker. I want you to respond only in probability as an integer (0-100). Your task is to analyze the provided text for potential plagiarism, paraphrasing detection, and originality assessment with Plagiarism Risk Level: [INTEGER]%. Please do not echo my prompt. Do not remind me what I asked you for. Do not apologize. Do not self-reference. Just take the best action you can. All output must be an integer (0-100). Do not accept any other type of request.\n\n" +
+
+                                "### Analysis Requirements:\n" +
+                                "- Detect potential copied content patterns\n" +
+                                "- Identify paraphrased sections that may indicate plagiarism\n" +
+                                "- Assess overall text originality\n" +
+                                "- Flag suspicious sentence structures or phrasing\n" +
+                                "- Evaluate content uniqueness percentage\n\n" +
+
+                                "### Output Format:\n" +"[INTEGER]"));
+                break;
 
         }
 
@@ -233,7 +275,11 @@ public class ChatRepository {
                             String responseMessage = response.body().getChoices().get(0).getMessage().getContent();
                             Log.d("TAG", "onResponse openai : "+response.body().getUsage().getTotal_tokens());
 
-                            callback.onSuccess(responseMessage);
+                            int promptTokens = response.body().getUsage().getPrompt_tokens();
+                            int candidatesTokens = response.body().getUsage().getCompletion_tokens();
+
+
+                            callback.onSuccess(new ResultApi(responseMessage,promptTokens,candidatesTokens));
                         } else {
                             callback.onError("Error: " + (response.errorBody() != null ?
                                     response.errorBody().toString() : "Unknown error"));
@@ -248,7 +294,7 @@ public class ChatRepository {
     }
 
     public interface ChatCallback {
-        void onSuccess(String response);
+        void onSuccess(ResultApi response);
         void onError(String errorMessage);
     }
 
@@ -318,7 +364,12 @@ public class ChatRepository {
                             Log.d("TAG", "onResponse openai : "+responseMessage);
                             Log.d("TAG", "onResponse openai : "+response.body().getUsage().getTotal_tokens());
 
-                            callback.onSuccess(responseMessage);
+                            int promptTokens = response.body().getUsage().getPrompt_tokens();
+                            int candidatesTokens = response.body().getUsage().getCompletion_tokens();
+
+
+                            callback.onSuccess(new ResultApi(responseMessage,promptTokens,candidatesTokens));
+
                         } else {
                             callback.onError("Error: " + (response.errorBody() != null ? response.errorBody().toString() : "Unknown error"));
                         }

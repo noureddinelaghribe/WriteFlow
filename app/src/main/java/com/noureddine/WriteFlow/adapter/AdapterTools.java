@@ -1,5 +1,8 @@
 package com.noureddine.WriteFlow.adapter;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.noureddine.WriteFlow.R;
@@ -43,6 +47,15 @@ public class AdapterTools extends RecyclerView.Adapter<AdapterTools.ViweHolder>{
         Tool tool = toolList.get(position);
         holder.text.setText(tool.getText());
         holder.img.setImageResource(tool.getImg());
+        holder.img.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+//        if ( tool.getText().equals("Paragraph Generator")
+//                || tool.getText().equals("Text Tools")
+//                || tool.getText().equals("Plagiarism Checking") ){
+//            holder.crown.setVisibility(View.VISIBLE);
+//        }else {
+//            holder.crown.setVisibility(View.GONE);
+//        }
+
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,13 +74,14 @@ public class AdapterTools extends RecyclerView.Adapter<AdapterTools.ViweHolder>{
 
     public class ViweHolder extends RecyclerView.ViewHolder {
         TextView text;
-        ImageView img;
+        ImageView img,crown;
         LinearLayout linearLayout;
         public ViweHolder(@NonNull View itemView) {
             super(itemView);
 
             text = itemView.findViewById(R.id.textView);
             img = itemView.findViewById(R.id.imageView);
+            //crown = itemView.findViewById(R.id.imageViewCrown);
             linearLayout = itemView.findViewById(R.id.linearLayout);
 
         }

@@ -11,12 +11,23 @@ public class User implements Serializable {
     private long endSubscription;
     private long wordPremium;
     private long wordProcessing;
-//    String plane;
+    private long creatAt;
+    //private boolean isActive;
 
 
     public User() {}
 
-    public User(String name, String email, String uid, String membership, long endSubscription, long wordPremium, long wordProcessing) {
+//    public User(String name, String email, String uid, String membership, long endSubscription, long wordPremium, long wordProcessing) {
+//        this.name = name;
+//        this.email = email;
+//        this.uid = uid;
+//        this.membership = membership;
+//        this.endSubscription = endSubscription;
+//        this.wordPremium = wordPremium;
+//        this.wordProcessing = wordProcessing;
+//    }
+
+    public User(String name, String email, String uid, String membership, long endSubscription, long wordPremium, long wordProcessing, long creatAt) {
         this.name = name;
         this.email = email;
         this.uid = uid;
@@ -24,9 +35,10 @@ public class User implements Serializable {
         this.endSubscription = endSubscription;
         this.wordPremium = wordPremium;
         this.wordProcessing = wordProcessing;
+        this.creatAt = creatAt;
     }
 
-//    public User(String name, String email, String uid, String membership, long endSubscription, long wordPremium, long wordProcessing, String plane) {
+    //    public User(String name, String email, String uid, String membership, long endSubscription, long wordPremium, long wordProcessing, String plane) {
 //        this.name = name;
 //        this.email = email;
 //        this.uid = uid;
@@ -99,5 +111,13 @@ public class User implements Serializable {
 
     public void setWordProcessing(long wordProcessing) {
         this.wordProcessing = wordProcessing;
+    }
+
+    public long getCreatAt() {
+        return creatAt;
+    }
+
+    public void setCreatAt(long creatAt) {
+        this.creatAt = creatAt;
     }
 }

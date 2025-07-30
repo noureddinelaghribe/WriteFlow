@@ -6,16 +6,21 @@ public class ToolPreferences {
     private String aiDetectorModel; // "openai" or "gemini"
     private String paragraphGeneratorModel; // "openai" or "gemini"
     private String summarizerModel; // "openai" or "gemini"
+    private String smartTranslationModel; // "openai" or "gemini"
+    private String plagiarismCheckingModel; // "openai" or "gemini"
 
     public ToolPreferences() {
     }
 
-    public ToolPreferences(String paraphraserModel, String grammarCheckerModel, String aiDetectorModel, String paragraphGeneratorModel, String summarizerModel) {
+    public ToolPreferences(String paraphraserModel, String grammarCheckerModel, String aiDetectorModel, String paragraphGeneratorModel,
+                           String summarizerModel, String smartTranslationModel, String plagiarismCheckingModel) {
         this.paraphraserModel = paraphraserModel;
         this.grammarCheckerModel = grammarCheckerModel;
         this.aiDetectorModel = aiDetectorModel;
         this.paragraphGeneratorModel = paragraphGeneratorModel;
         this.summarizerModel = summarizerModel;
+        this.smartTranslationModel = smartTranslationModel;
+        this.plagiarismCheckingModel = plagiarismCheckingModel;
     }
 
     public String getParaphraserModel() {
@@ -56,5 +61,21 @@ public class ToolPreferences {
 
     public void setSummarizerModel(String summarizerModel) {
         this.summarizerModel = summarizerModel;
+    }
+
+    public String getSmartTranslationModel() {
+        return smartTranslationModel;
+    }
+
+    public void setSmartTranslationModel(String smartTranslationModel) {
+        this.smartTranslationModel = smartTranslationModel;
+    }
+
+    public String getPlagiarismCheckingModel() {
+        return plagiarismCheckingModel;
+    }
+
+    public void setPlagiarismCheckingModel(String plagiarismCheckingModel) {
+        this.plagiarismCheckingModel = plagiarismCheckingModel;
     }
 }

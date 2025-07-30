@@ -1,5 +1,7 @@
 package com.noureddine.WriteFlow.Utils;
 
+import static androidx.test.InstrumentationRegistry.getContext;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,6 +36,8 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.noureddine.WriteFlow.R;
+import com.noureddine.WriteFlow.model.ProcessingWord;
+import com.noureddine.WriteFlow.repositorys.FirebaseRepository;
 import com.noureddine.WriteFlow.viewModels.ChatViewModel;
 import com.noureddine.WriteFlow.viewModels.GeminiViewModel;
 
@@ -50,12 +54,13 @@ public class CopySaveResult {
 
     private Activity activity;
     private ActivityResultLauncher<String> requestPermissionLauncher;
-    private String SAVE_FOLDER_NAME = "WordLoom";
+    public static String SAVE_FOLDER_NAME = "WordLoom";
     private GeminiViewModel geminiViewModel;
     private DialogLoading dialogLoading;
     private ChatViewModel viewModel;
     private String []modelAi = {"openai","gemini"};
     private EncryptedPrefsManager prefs;
+    private FirebaseRepository firebaseRepository;
 
 
     public CopySaveResult(Activity activity, ActivityResultLauncher<String> requestPermissionLauncher) {
@@ -67,6 +72,14 @@ public class CopySaveResult {
 
         viewModel = new ViewModelProvider((ViewModelStoreOwner) activity).get(ChatViewModel.class);
         geminiViewModel = new ViewModelProvider((ViewModelStoreOwner) activity).get(GeminiViewModel.class);
+
+        firebaseRepository = new FirebaseRepository(activity);
+
+
+    }
+
+    public CopySaveResult(Activity activity) {
+        this.activity = activity;
     }
 
     public void copyClipboard(String text){
@@ -74,11 +87,11 @@ public class CopySaveResult {
         ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("label", text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(activity, "Text copied to clipboard", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "Copied to clipboard", Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint("MissingInflatedId")
-    public void saveAsFile(String text,String type){
+    public void saveAsFile(String text,String type,String userId){
 
         // Inflate the dialog layout
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -134,9 +147,20 @@ public class CopySaveResult {
                                                 Log.d("TAG", "saveAsFile html: isLoading gemini");
                                                 if (isLoading) dialogLoading.showLoadingProgressDialog();
                                             });
-                                            geminiViewModel.getResult().observe((LifecycleOwner) activity, result -> {
-                                                Log.d("TAG", "saveAsFile html: "+result);
-                                                saveAsHtml(result,editText.getText().toString().trim());
+                                            geminiViewModel.getResultApi().observe((LifecycleOwner) activity, result -> {
+                                                Log.d("TAG", "saveAsFile html: "+result.getResult());
+
+                                                ProcessingWord processingWord = new ProcessingWord(
+                                                        userId,
+                                                        type,
+                                                        result.getPromptTokens(),
+                                                        result.getCandidatesTokens(),
+                                                        System.currentTimeMillis()
+                                                );
+
+                                                firebaseRepository.ProcessingAnalytics(processingWord);
+
+                                                saveAsHtml(result.getResult(),editText.getText().toString().trim());
                                                 dialogLoading.dismissLoadingProgressDialog();
                                             });
                                             geminiViewModel.getError().observe((LifecycleOwner) activity, error -> {
@@ -154,7 +178,18 @@ public class CopySaveResult {
                                             });
                                             viewModel.getResponseLiveData().observe((LifecycleOwner) activity, response -> {
                                                 Log.d("TAG", "saveAsFile html: "+response);
-                                                saveAsHtml(response,editText.getText().toString().trim());
+                                                saveAsHtml(response.getResult(),editText.getText().toString().trim());
+
+                                                ProcessingWord processingWord = new ProcessingWord(
+                                                        userId,
+                                                        type,
+                                                        response.getPromptTokens(),
+                                                        response.getCandidatesTokens(),
+                                                        System.currentTimeMillis()
+                                                );
+
+                                                firebaseRepository.ProcessingAnalytics(processingWord);
+
                                                 dialogLoading.dismissLoadingProgressDialog();
                                             });
                                             viewModel.getErrorLiveData().observe((LifecycleOwner) activity, errorMessage -> {
@@ -359,7 +394,7 @@ public class CopySaveResult {
         return false;
     }
 
-    private static String processBidirectionalText(String input) {
+    public static String processBidirectionalText(String input) {
         String shapedInput = shapeArabicText(input);
         Bidi bidi = new Bidi(shapedInput, Bidi.DIRECTION_RIGHT_TO_LEFT);
         return bidi.writeReordered(Bidi.DO_MIRRORING);

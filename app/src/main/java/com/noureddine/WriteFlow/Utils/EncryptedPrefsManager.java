@@ -95,6 +95,7 @@ public class EncryptedPrefsManager {
             userJson.put("endSubscription", user.getEndSubscription());
             userJson.put("wordPremium", user.getWordPremium());
             userJson.put("wordProcessing", user.getWordProcessing());
+            userJson.put("creatAt", user.getCreatAt());
 
             // Save user data using the user's uid as the key.
             encryptedPrefs.edit().putString(user.getUid(), userJson.toString()).apply();
@@ -124,6 +125,7 @@ public class EncryptedPrefsManager {
         }
         try {
             JSONObject userJson = new JSONObject(userString);
+            long creatAt = userJson.has("creatAt") ? userJson.getLong("creatAt") : 0L;
             return new User(
                     userJson.getString("name"),
                     userJson.getString("email"),
@@ -131,7 +133,8 @@ public class EncryptedPrefsManager {
                     userJson.getString("membership"),
                     userJson.getLong("endSubscription"),
                     userJson.getLong("wordPremium"),
-                    userJson.getLong("wordProcessing")
+                    userJson.getLong("wordProcessing"),
+                    creatAt
             );
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse user data", e);
@@ -152,6 +155,8 @@ public class EncryptedPrefsManager {
             ToolPreferencesJson.put("aiDetectorModel", toolPreferences.getAiDetectorModel());
             ToolPreferencesJson.put("paragraphGeneratorModel", toolPreferences.getParagraphGeneratorModel());
             ToolPreferencesJson.put("summarizerModel", toolPreferences.getSummarizerModel());
+            ToolPreferencesJson.put("smartTranslationModel", toolPreferences.getSmartTranslationModel());
+            ToolPreferencesJson.put("plagiarismCheckingModel", toolPreferences.getPlagiarismCheckingModel());
 
             // Save user data using the user's uid as the key.
             encryptedPrefs.edit().putString(SETTING_KEY, ToolPreferencesJson.toString()).apply();
@@ -185,7 +190,9 @@ public class EncryptedPrefsManager {
                     ToolPreferencesStringJson.getString("grammarCheckerModel"),
                     ToolPreferencesStringJson.getString("aiDetectorModel"),
                     ToolPreferencesStringJson.getString("paragraphGeneratorModel"),
-                    ToolPreferencesStringJson.getString("summarizerModel")
+                    ToolPreferencesStringJson.getString("summarizerModel"),
+                    ToolPreferencesStringJson.getString("smartTranslationModel"),
+                    ToolPreferencesStringJson.getString("plagiarismCheckingModel")
             );
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse ToolPreferences data", e);

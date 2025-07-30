@@ -110,8 +110,9 @@ public class GoogleSign {
                             boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             if (isNewUser) {
                                 // This is a new account creation
-                                prefs.saveUser(new User(user.getDisplayName(), user.getEmail(), user.getUid(),FREE_PLAN_NAME, 0,0,0));
-                                firebaseRepository.saveUser(new User(user.getDisplayName(),user.getEmail(),user.getUid(),FREE_PLAN_NAME,0,0,0));
+                                long timeNow = System.currentTimeMillis();
+                                prefs.saveUser(new User(user.getDisplayName(), user.getEmail(), user.getUid(),FREE_PLAN_NAME, 0,0,0,timeNow));
+                                firebaseRepository.saveUser(new User(user.getDisplayName(),user.getEmail(),user.getUid(),FREE_PLAN_NAME,0,0,0,timeNow));
                                 Toast.makeText(activity, "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                             } else {
                                 // This is an existing user login

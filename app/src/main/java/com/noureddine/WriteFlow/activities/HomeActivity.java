@@ -29,6 +29,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,6 +55,7 @@ import com.noureddine.WriteFlow.model.Update;
 import com.noureddine.WriteFlow.model.User;
 import com.noureddine.WriteFlow.viewModels.SettingsViewModel;
 import com.noureddine.WriteFlow.viewModels.TimeViewModel;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,7 +74,7 @@ public class HomeActivity extends AppCompatActivity {
     private long endSubscription;
     private static final String TAG = "TAGHomeActivity";
     private SettingsViewModel settingsViewModel;
-
+    FloatingActionButton fabSupport;
 
 
     @SuppressLint({"MissingInflatedId", "NotifyDataSetChanged"})
@@ -84,6 +87,14 @@ public class HomeActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        // FAB setup
+        fabSupport = findViewById(R.id.fab_support);
+        fabSupport.setOnClickListener(v -> {
+            String url = "https://wa.link/rmbutg";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
         });
 
         tabLayout = findViewById(R.id.tabLayout);

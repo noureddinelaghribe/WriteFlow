@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.PhraseFlow" parent="Base.Theme.PhraseFlow" />
+
+
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/c6</item>
+        <item name="android:textColor">@color/c6</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

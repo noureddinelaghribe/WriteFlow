@@ -85,7 +85,8 @@ public class ToolsFragment extends Fragment {
         toolList.add(new Tool(R.drawable.writing,"Paragraph Generator"));
         toolList.add(new Tool(R.drawable.summarizer,"Summarizer"));
         toolList.add(new Tool(R.drawable.text,"Text Tools"));
-        //toolList.add(new Tool(R.drawable.translation,"Translation"));
+        toolList.add(new Tool(R.drawable.translation,"Smart Translation"));
+        toolList.add(new Tool(R.drawable.plagiarism,"Plagiarism Checking"));
 
         // Get the ViewPager2 from the activity
         HomeActivity activity = (HomeActivity) getActivity();
@@ -96,26 +97,45 @@ public class ToolsFragment extends Fragment {
             @Override
             public void OnClick(Tool tool) {
                 Intent intent;
-                if (tool.getText().equals("Text Tools")){
-                    if (user.getMembership().equals(FREE_PLAN_NAME)){
-                        Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
-                        viewPager = requireActivity().findViewById(R.id.viwepager);
-                        viewPager.setCurrentItem(2, true);
-                    }else {
-                        intent = new Intent(getContext(), TextToolActivity.class);
-                        getContext().startActivity(intent);
-                    }
+//                if (tool.getText().equals("Text Tools")){
+//                    if (user.getMembership().equals(FREE_PLAN_NAME)){
+//                        Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
+//                        viewPager = requireActivity().findViewById(R.id.viwepager);
+//                        viewPager.setCurrentItem(2, true);
+//                    }else {
+//                        intent = new Intent(getContext(), TextToolActivity.class);
+//                        getContext().startActivity(intent);
+//                    }
+////                } else if (tool.getText().equals("Smart Translation")) {
+////                    Toast.makeText(activity, "Coming Soon", Toast.LENGTH_SHORT).show();
+////                } else if (tool.getText().equals("Plagiarism Checking")) {
+////                    Toast.makeText(activity, "Coming Soon", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    if (user.getMembership().equals(FREE_PLAN_NAME) && (tool.getText().equals("Paragraph Generator")
+//                            || tool.getText().equals("Text Tools") || tool.getText().equals("Plagiarism Checking") )){
+//                        Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
+//                        viewPager = requireActivity().findViewById(R.id.viwepager);
+//                        viewPager.setCurrentItem(2, true);
+//                    }else {
+//                        intent = new Intent(getContext(), ProcessingWordActivity.class);
+//                        intent.putExtra("type",tool.getText());
+//                        getContext().startActivity(intent);
+//                    }
+//                }
+
+
+                if (user.getMembership().equals(FREE_PLAN_NAME) && (tool.getText().equals("Paragraph Generator")
+                        || tool.getText().equals("Text Tools") || tool.getText().equals("Plagiarism Checking") )){
+                    Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
+                    viewPager = requireActivity().findViewById(R.id.viwepager);
+                    viewPager.setCurrentItem(2, true);
                 }else {
-                    if (user.getMembership().equals(FREE_PLAN_NAME) && tool.getText().equals("Paragraph Generator")){
-                        Toast.makeText(activity, "This feature is only available in the premium plan. Please upgrade to use it.", Toast.LENGTH_SHORT).show();
-                        viewPager = requireActivity().findViewById(R.id.viwepager);
-                        viewPager.setCurrentItem(2, true);
-                    }else {
-                        intent = new Intent(getContext(), ProcessingWordActivity.class);
-                        intent.putExtra("type",tool.getText());
-                        getContext().startActivity(intent);
-                    }
+                    intent = new Intent(getContext(), ProcessingWordActivity.class);
+                    intent.putExtra("type",tool.getText());
+                    getContext().startActivity(intent);
                 }
+
+
 
             }
         });

@@ -1,4 +1,3 @@
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -66,8 +65,13 @@ dependencies {
     implementation("org.apache.poi:poi:5.2.3")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
 
+    implementation("org.apache.poi:poi-scratchpad:5.2.3")
+    implementation("org.apache.commons:commons-collections4:4.4")
+
     implementation("com.itextpdf:itextpdf:5.5.13.3")
     implementation("com.ibm.icu:icu4j:73.2")
+
+    implementation("org.jsoup:jsoup:1.16.1")
 
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("com.google.firebase:firebase-auth:22.3.1")

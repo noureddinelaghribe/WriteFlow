@@ -9,7 +9,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.noureddine.WriteFlow.model.ResultApi;
 import com.noureddine.WriteFlow.model.TypeProcessing;
+import com.noureddine.WriteFlow.model.Usage;
 import com.noureddine.WriteFlow.repositorys.ChatRepository;
 
 import java.io.Closeable;
@@ -17,7 +19,7 @@ import java.io.Closeable;
 // ChatViewModel.java
 public class ChatViewModel extends ViewModel {
     private final ChatRepository repository ;
-    private final MutableLiveData<String> responseLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ResultApi> responseLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loadingLiveData = new MutableLiveData<>(false);
     private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
 
@@ -33,7 +35,7 @@ public class ChatViewModel extends ViewModel {
     public ChatViewModel() {
         repository = new ChatRepository();
     }
-    public LiveData<String> getResponseLiveData() {
+    public LiveData<ResultApi> getResponseLiveData() {
         return responseLiveData;
     }
 
@@ -50,7 +52,7 @@ public class ChatViewModel extends ViewModel {
 
         repository.sendTodo(typeProcessing, new ChatRepository.ChatCallback() {
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(ResultApi response) {
                 responseLiveData.postValue(response);
                 loadingLiveData.postValue(false);
             }
@@ -69,7 +71,7 @@ public class ChatViewModel extends ViewModel {
 
         repository.convertText2Html(text, new ChatRepository.ChatCallback() {
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(ResultApi response) {
                 responseLiveData.postValue(response);
                 loadingLiveData.postValue(false);
             }

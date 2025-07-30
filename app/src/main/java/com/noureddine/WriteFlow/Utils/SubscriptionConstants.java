@@ -35,18 +35,24 @@ public class SubscriptionConstants {
     public final static int wordLimitFreePlaneAIDetector = 500;
     public final static int wordLimitFreePlaneGrammarChecker = 500;
     public final static int wordLimitFreePlaneParaphraserRewriting = 500;
+    public final static int wordLimitFreePlaneSmartTranslation = 500;
+    public final static int wordLimitFreePlanePlagiarismChecking = 500;
 
     public final static int wordLimitBasicPlaneSummarizer = 4000;
     public final static int wordLimitBasicPlaneParagraphGenerator = 2000;
     public final static int wordLimitBasicPlaneAIDetector = 4000;
     public final static int wordLimitBasicPlaneGrammarChecker = 2500;
     public final static int wordLimitBasicPlaneParaphraserRewriting = 2500;
+    public final static int wordLimitBasicPlaneSmartTranslation = 2500;
+    public final static int wordLimitBasicPlanePlagiarismChecking = 4000;
 
     public final static int wordLimitProPlaneSummarizer = 6000;
     public final static int wordLimitProPlaneParagraphGenerator = 2000;
     public final static int wordLimitProPlaneAIDetector = 6000;
     public final static int wordLimitProPlaneGrammarChecker = 3500;
     public final static int wordLimitProPlaneParaphraserRewriting = 3500;
+    public final static int wordLimitProPlaneSmartTranslation = 3500;
+    public final static int wordLimitProPlanePlagiarismChecking = 6000;
 
 
     public static final String PRODUCT_ID_1 = "basic_word_processing";

@@ -35,7 +35,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +59,7 @@ public class SubsecribeFragment extends Fragment{
 
     private static final String TAG = "SubsecribeFragment";
 
-    private LinearLayout linearLayoutPlans, linearLayoutPremium, linearLayoutMonthlyBasic, linearLayoutMonthlyPro, linearLayoutBasic, linearLayoutPro;
+    private LinearLayout linearLayoutPlans, linearLayoutPremium, linearLayoutMonthlyBasic, linearLayoutKeyActive, linearLayoutMonthlyPro, linearLayoutBasic, linearLayoutPro,keyActive;
     private TextView textView ;
     private ViewPager2 viewPager;
     private Button pay ;
@@ -65,6 +67,9 @@ public class SubsecribeFragment extends Fragment{
     private EncryptedPrefsManager prefs;
     private DatabaseReference databaseReference;
     private User user;
+    private ScrollView scrollView ;
+    private EditText key;
+
     //private BillingManager billingManager;
     //private BillingManagerPaypal billingManagerPaypal;
     //private SubscriptionBillingManager subscriptionBillingManager;
@@ -94,12 +99,19 @@ public class SubsecribeFragment extends Fragment{
         linearLayoutPlans = v.findViewById(R.id.linearLayoutPlans);
         linearLayoutPremium = v.findViewById(R.id.linearLayoutPremium);
         linearLayoutMonthlyBasic = v.findViewById(R.id.linearLayoutMonthly);
+        linearLayoutKeyActive = v.findViewById(R.id.linearLayoutActive);
         linearLayoutMonthlyPro = v.findViewById(R.id.linearLayoutfilter);
         linearLayoutBasic = v.findViewById(R.id.linearLayoutBasic);
         linearLayoutPro = v.findViewById(R.id.linearLayoutPro);
         textView = v.findViewById(R.id.textView17);
         pay = v.findViewById(R.id.button2);
+        keyActive = v.findViewById(R.id.linearLayoutKeyActive);
+        scrollView = v.findViewById(R.id.scrollView);
+        key = v.findViewById(R.id.serial1);
+
         pay.setVisibility(View.GONE);
+        keyActive.setVisibility(View.GONE);
+
 
         prefs = EncryptedPrefsManager.getInstance(getContext());
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -117,38 +129,62 @@ public class SubsecribeFragment extends Fragment{
 
         linearLayoutMonthlyBasic.setOnClickListener(v1 -> {
             linearLayoutMonthlyBasic.setSelected(true);
+            linearLayoutKeyActive.setSelected(false);
             linearLayoutMonthlyPro.setSelected(false);
             linearLayoutBasic.setSelected(false);
             linearLayoutPro.setSelected(false);
+            keyActive.setVisibility(View.GONE);
             pay.setVisibility(View.VISIBLE);
             pay.setText("Continue With Plan Basic");
+            scrollView.post(() -> scrollView.smoothScrollTo(0, pay.getTop()));
+        });
+
+        linearLayoutKeyActive.setOnClickListener(v1 -> {
+            linearLayoutKeyActive.setSelected(true);
+            linearLayoutMonthlyBasic.setSelected(false);
+            linearLayoutMonthlyPro.setSelected(false);
+            linearLayoutBasic.setSelected(false);
+            linearLayoutPro.setSelected(false);
+            keyActive.setVisibility(View.VISIBLE);
+            pay.setVisibility(View.VISIBLE);
+            pay.setText("Continue Activation key");
+            scrollView.post(() -> scrollView.smoothScrollTo(0, pay.getTop()));
         });
 
         linearLayoutMonthlyPro.setOnClickListener(v1 -> {
             linearLayoutMonthlyBasic.setSelected(false);
+            linearLayoutKeyActive.setSelected(false);
             linearLayoutMonthlyPro.setSelected(true);
             linearLayoutBasic.setSelected(false);
             linearLayoutPro.setSelected(false);
+            keyActive.setVisibility(View.GONE);
             pay.setVisibility(View.VISIBLE);
             pay.setText("Continue With Plan Pro");
+            scrollView.post(() -> scrollView.smoothScrollTo(0, pay.getTop()));
         });
 
         linearLayoutBasic.setOnClickListener(v1 -> {
             linearLayoutMonthlyBasic.setSelected(false);
+            linearLayoutKeyActive.setSelected(false);
             linearLayoutMonthlyPro.setSelected(false);
             linearLayoutBasic.setSelected(true);
             linearLayoutPro.setSelected(false);
+            keyActive.setVisibility(View.GONE);
             pay.setVisibility(View.VISIBLE);
             pay.setText("Continue With Pack Basic");
+            scrollView.post(() -> scrollView.smoothScrollTo(0, pay.getTop()));
         });
 
         linearLayoutPro.setOnClickListener(v1 -> {
             linearLayoutMonthlyBasic.setSelected(false);
+            linearLayoutKeyActive.setSelected(false);
             linearLayoutMonthlyPro.setSelected(false);
             linearLayoutBasic.setSelected(false);
             linearLayoutPro.setSelected(true);
+            keyActive.setVisibility(View.GONE);
             pay.setVisibility(View.VISIBLE);
             pay.setText("Continue With Pack Pro");
+            scrollView.post(() -> scrollView.smoothScrollTo(0, pay.getTop()));
         });
 
         pay.setOnClickListener(v1 -> {
@@ -163,24 +199,37 @@ public class SubsecribeFragment extends Fragment{
 //                billingManager.launchPurchaseFlow(PRODUCT_ID_2);
 //            }
 
+            if (linearLayoutKeyActive.isSelected()){
+                if (key.length()!=23){
+                    key.setError("Invalid activation key");
+                }else {
+                    Toast.makeText(getContext(), "Invalid activation key.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
 
-            Intent intent = new Intent(getContext(), PayPalPayActivity.class);
+            }else {
 
-            if (linearLayoutMonthlyBasic.isSelected()){
-                intent.putExtra("payment_url", BASIC_PLAN_LINK_PAY);
-                intent.putExtra("plan", BASIC_PLAN_NAME);
-            }else if (linearLayoutMonthlyPro.isSelected()){
-                intent.putExtra("payment_url", PRO_PLAN_LINK_PAY);
-                intent.putExtra("plan", PRO_PLAN_NAME);
-            }else if (linearLayoutBasic.isSelected()){
-                intent.putExtra("payment_url", BASIC_PROCESS_LINK_PAY);
-                intent.putExtra("plan", BASIC_NAME);
-            }else if (linearLayoutPro.isSelected()){
-                intent.putExtra("payment_url", PRO_PROCESS_LINK_PAY);
-                intent.putExtra("plan", PRO_NAME);
+                Intent intent = new Intent(getContext(), PayPalPayActivity.class);
+
+                if (linearLayoutMonthlyBasic.isSelected()){
+                    intent.putExtra("payment_url", BASIC_PLAN_LINK_PAY);
+                    intent.putExtra("plan", BASIC_PLAN_NAME);
+                }else if (linearLayoutMonthlyPro.isSelected()){
+                    intent.putExtra("payment_url", PRO_PLAN_LINK_PAY);
+                    intent.putExtra("plan", PRO_PLAN_NAME);
+                }else if (linearLayoutBasic.isSelected()){
+                    intent.putExtra("payment_url", BASIC_PROCESS_LINK_PAY);
+                    intent.putExtra("plan", BASIC_NAME);
+                }else if (linearLayoutPro.isSelected()){
+                    intent.putExtra("payment_url", PRO_PROCESS_LINK_PAY);
+                    intent.putExtra("plan", PRO_NAME);
+                }
+
+                startActivity(intent);
+
             }
-
-            startActivity(intent);
 
 
         });

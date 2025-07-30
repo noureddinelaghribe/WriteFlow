@@ -5,6 +5,7 @@ import com.noureddine.WriteFlow.interfaces.GeminiApiService;
 import com.noureddine.WriteFlow.model.Content;
 import com.noureddine.WriteFlow.model.GeminiRequest;
 import com.noureddine.WriteFlow.model.GeminiResponse;
+import com.noureddine.WriteFlow.model.Message;
 import com.noureddine.WriteFlow.model.Part;
 import com.noureddine.WriteFlow.model.SystemInstruction;
 import com.noureddine.WriteFlow.model.TypeProcessing;
@@ -168,6 +169,71 @@ public class GeminiRepository {
                 systemParts = new ArrayList<>();
                 systemParts.add(systemPartS);
                 sysInstruction = new SystemInstruction(systemParts);
+                break;
+            case "Smart Translation":
+
+                Part systemPartST = new Part(
+                        "### Instructions\n"+
+                                "1. **Act as an advanced translator** with native-level fluency in both source and target languages.\n"+
+                                "2. **Translate the provided text** with the following requirements:\n"+
+                                "   - **Accuracy**: Maintain 100% semantic fidelity to the original meaning.\n"+
+                                "   - **Naturalness**: Produce idiomatic, native-sounding output in the target language.\n"+
+                                "   - **Context**: Preserve tone, register, and cultural nuances appropriately.\n"+
+                                "   - **Terminology**: Use consistent, domain-appropriate vocabulary throughout.\n"+
+                                "3. **Output format**:\n"+
+                                "   - Provide only the translated text.\n"+
+                                "   - No explanations, notes, or extra commentary.\n"+
+                                "4. **Focus solely on translation**: Do not accept other requests or modifications.\n"+
+
+                                "Quality Standards:\n" +
+                                "- Preserve original sentence structure when natural\n" +
+                                "- Adapt cultural references for target audience\n" +
+                                "- Maintain formal/informal register consistency\n" +
+                                "- Handle idioms and metaphors contextually\n\n" +
+
+                                "Strict Prohibitions:\n" +
+                                "- No literal word-for-word translations\n" +
+                                "- No added interpretations or explanations\n" +
+                                "- No formatting changes unless required by target language"+
+
+                                "### Example format:\n"+
+                                "[النص المترجم هنا]\n"+
+                                "DO NOT EXPLAIN PROCESS OR ADD UNREQUESTED CONTENT.");
+                systemParts = new ArrayList<>();
+                systemParts.add(systemPartST);
+                sysInstruction = new SystemInstruction(systemParts);
+
+                break;
+            case "Plagiarism Checking":
+                Part systemPartPC = new Part(
+                        "Act as an advanced Plagiarism Checker. I want you to respond only in probability as an integer (0-100). Your task is to analyze the provided text for potential plagiarism, paraphrasing detection, and originality assessment with Plagiarism Risk Level: [INTEGER]%. Please do not echo my prompt. Do not remind me what I asked you for. Do not apologize. Do not self-reference. Just take the best action you can. All output must be an integer (0-100). Do not accept any other type of request.\n\n" +
+
+                                "### Analysis Requirements:\n" +
+                                "- Detect potential copied content patterns\n" +
+                                "- Identify paraphrased sections that may indicate plagiarism\n" +
+                                "- Assess overall text originality\n" +
+                                "- Flag suspicious sentence structures or phrasing\n" +
+                                "- Evaluate content uniqueness percentage\n\n" +
+
+                                "### Output Format:\n" +"[INTEGER]"
+//                                "{\n" +
+//                                "\"originalityScore\": [INTEGER percentage],\n" +
+//                                "\"riskLevel\": \"[LOW/MEDIUM/HIGH]\",\n" +
+//                                "\"suspiciousSegments\": [\n" +
+//                                "  {\n" +
+//                                "    \"text\": \"[Flagged text segment]\",\n" +
+//                                "    \"concern\": \"[Type of plagiarism concern]\"\n" +
+//                                "  }\n" +
+//                                "],\n" +
+//                                "\"overallAssessment\": \"[Brief assessment in target language]\"\n" +
+//                                "}"
+                );
+                //Part systemPartPC = new Part("Act as an advanced plagiarism detection system. Analyze the provided text for plagiarism probability content by evaluating: Structural Patterns : Repetitive phrases, formulaic transitions (e.g., 'current trends indicate'), or unnatural lists 2. Technical Jargon : Overuse of terms like 'low-perplexity phrases' or 'multi-modal algorithms' 46. Coherence : Lack of nuanced reasoning or personal anecdotes 9. Hallucinations : Claims of functionality unsupported by context (e.g., 'sustainable materials' without real-world examples) 7. Timestamps/Context : Anachronisms (e.g., 'February 2025' on a 2023 dataset) 1. Output : Return only the detected AI probability as an integer (0-100) . Apply all filters to minimize false positives. Examples : Sample Text : 'The sky is blue.' → Output: '0' Sample Text : 'AI algorithms optimize engine mapping for peak efficiency' → Output: '40'. Do not accept any other type of request.");
+
+                systemParts = new ArrayList<>();
+                systemParts.add(systemPartPC);
+                sysInstruction = new SystemInstruction(systemParts);
+
                 break;
 
         }

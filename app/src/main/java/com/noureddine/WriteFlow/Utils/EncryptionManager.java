@@ -116,7 +116,8 @@ public class EncryptionManager {
                         userJson.getString("membership"),
                         userJson.getLong("endSubscription"),
                         userJson.getLong("wordPremium"),
-                        userJson.getLong("wordProcessing")
+                        userJson.getLong("wordProcessing"),
+                        userJson.getLong("creatAt")
                 );
             } catch (JSONException e) {
                 Log.e(TAG, "Failed to parse user data", e);

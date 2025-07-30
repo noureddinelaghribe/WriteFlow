@@ -7,6 +7,7 @@
     tools:context=".fragments.SubsecribeFragment">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -439,6 +440,62 @@
 
                 </androidx.cardview.widget.CardView>
 
+
+
+
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="1dp">
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutActive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_plan_selector"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Premium Key"
+                            android:textColor="@color/c4"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Enter your activation key below to unlock Wordloom Premium features"
+                                android:textColor="@color/c4" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+
+
+
             </LinearLayout>
 
 
@@ -558,6 +615,59 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linearLayoutKeyActive"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/bg_plan_unselected">
+
+                <!-- Title -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Activate Your Wordloom Premium Key"
+                    android:textStyle="bold"
+                    android:textColor="#333"
+                    android:gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp" />
+
+                <!-- Serial Code Input -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <EditText
+                        android:id="@+id/serial1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="XXXXX - XXXXX - XXXXX - XXXXX"
+                        android:inputType="textCapCharacters"
+                        android:maxLength="23"
+                        android:textAlignment="center"
+                        android:background="@drawable/bg_plan_selector" />
+
+                </LinearLayout>
+
+                <!-- Helper Text -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Use your activation key to enable full access."
+                    android:textSize="12sp"
+                    android:textColor="#666"
+                    android:gravity="center"
+                    android:layout_marginBottom="24dp" />
+
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/button2"
                 android:layout_width="match_parent"
@@ -631,36 +741,36 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Your subscription will be charged through the Google Play Store."
-                android:textColor="@color/c4"
-                android:drawableLeft="@drawable/send_message"
-                android:drawablePadding="5dp"/>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="Your subscription will be charged through the Google Play Store."-->
+<!--                android:textColor="@color/c4"-->
+<!--                android:drawableLeft="@drawable/send_message"-->
+<!--                android:drawablePadding="5dp"/>-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="If you cancel your subscription, it will remain active until the end of the current billing period."
-                android:textColor="@color/c4"
-                android:drawableLeft="@drawable/send_message"
-                android:drawablePadding="5dp"/>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="If you cancel your subscription, it will remain active until the end of the current billing period."-->
+<!--                android:textColor="@color/c4"-->
+<!--                android:drawableLeft="@drawable/send_message"-->
+<!--                android:drawablePadding="5dp"/>-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="Your subscription can be managed or cancelled under • your google Play Store Account Profile > Payments and Subscriptions > Subscriptions"
-                android:textColor="@color/c4"
-                android:drawableLeft="@drawable/send_message"
-                android:drawablePadding="5dp"
-                android:layout_marginBottom="30dp"/>
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:text="Your subscription can be managed or cancelled under • your google Play Store Account Profile > Payments and Subscriptions > Subscriptions"-->
+<!--                android:textColor="@color/c4"-->
+<!--                android:drawableLeft="@drawable/send_message"-->
+<!--                android:drawablePadding="5dp"-->
+<!--                android:layout_marginBottom="30dp"/>-->
 
         </LinearLayout>
 

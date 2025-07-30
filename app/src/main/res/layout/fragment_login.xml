@@ -67,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="right"
+                    android:background="?android:attr/selectableItemBackground"
                     android:textColor="@color/c7"
                     android:text="Forgot password?"/>
 
@@ -87,6 +88,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_margin="5dp"
+                    android:background="?android:attr/selectableItemBackground"
                     android:text="Don't have an account?"
                     android:textColor="@color/c7" />
 
@@ -126,6 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
             android:text="Privacy Prolicy"
             android:textColor="@color/c7"
             android:textSize="10sp" />

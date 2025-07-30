@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.noureddine.WriteFlow.Utils.EncryptedPrefsManager;
 import com.noureddine.WriteFlow.Utils.EncryptionManager;
 import com.noureddine.WriteFlow.model.HistoryArticle;
+import com.noureddine.WriteFlow.model.ProcessingWord;
 import com.noureddine.WriteFlow.model.User;
 
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class FirebaseRepository {
     // Save a simple key-value pair to the DatabaseArticle
     public void saveUser(User user) {
 //        databaseReference.child(EncryptionManager.encryptText("Users")).child(EncryptionManager.encryptText(prefs.getUser().getUid())).setValue(EncryptionManager.encryptUser(user))
+        user.setCreatAt(System.currentTimeMillis());
         databaseReference.child("Users").child(prefs.getUser().getUid()).setValue(user)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Data saved successfully for key: " + prefs.getUser().getUid());
@@ -39,9 +41,9 @@ public class FirebaseRepository {
     }
 
     // Save a simple key-value pair to the DatabaseArticle
-    public void ProcessingAnalytics(String type) {
-        String key = databaseReference.push().getKey(); ;
-        databaseReference.child("ProcessingAnalytics").child(key).child(prefs.getUser().getUid()).setValue(type)
+    public void ProcessingAnalytics(ProcessingWord processingWord) {
+        String key = databaseReference.push().getKey();
+        databaseReference.child("ProcessingAnalytics").child(key)/*.child(prefs.getUser().getUid())*/.setValue(processingWord)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "ProcessingAnalytics saved successfully for key: " + prefs.getUser().getUid());
                 })

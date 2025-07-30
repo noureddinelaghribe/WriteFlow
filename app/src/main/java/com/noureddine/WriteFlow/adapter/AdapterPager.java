@@ -22,6 +22,7 @@ public class AdapterPager extends FragmentStateAdapter {
 
     @SuppressLint("NotifyDataSetChanged")
     public void addTab(MyTab tab) {
+
         list.add(tab);
         notifyDataSetChanged();
     }

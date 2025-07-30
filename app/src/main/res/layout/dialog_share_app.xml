@@ -70,7 +70,7 @@
                 android:id="@+id/imageViewQRCode"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:src="@drawable/ic_qrcode_download"
+                android:src="@drawable/ic_qrcode_app"
                 android:padding="10dp"
                 android:layout_marginBottom="10dp" />
 

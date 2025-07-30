@@ -9,6 +9,7 @@ import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.PRO_PLAN_PROC
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,10 +27,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.noureddine.WriteFlow.R;
+import com.noureddine.WriteFlow.Utils.CopySaveResult;
 import com.noureddine.WriteFlow.Utils.DataCoverter;
 import com.noureddine.WriteFlow.Utils.EncryptedPrefsManager;
 import com.noureddine.WriteFlow.Utils.NumberFormat;
@@ -51,6 +54,7 @@ public class SettingFragment extends Fragment {
     private EncryptedPrefsManager prefs;
     private User user ;
 
+    CopySaveResult copySaveResult;
 
     public SettingFragment() {}
 
@@ -88,6 +92,7 @@ public class SettingFragment extends Fragment {
 
         prefs = EncryptedPrefsManager.getInstance(getContext());
         initUI();
+        copySaveResult = new CopySaveResult(getActivity());
 
         // Get the ViewPager2 from the activity
         activity = (HomeActivity) getActivity();
@@ -147,10 +152,9 @@ public class SettingFragment extends Fragment {
         contactUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse("mailto:")); // هذا يحدد أن النية لإرسال بريد إلكتروني فقط
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"WordLoom0@gmail.com"});
-                startActivity(emailIntent);
+                String url = "https://wa.link/rmbutg";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
             }
         });
 
@@ -221,18 +225,33 @@ public class SettingFragment extends Fragment {
         final ImageView btnClose = dialogView.findViewById(R.id.imageViewClose);
         final Button buttonCopyLink = dialogView.findViewById(R.id.buttonCopyLink);
         final Button buttonShareNow = dialogView.findViewById(R.id.buttonShareNow);
+        final LinearLayout linearLayoutWhatsApp = dialogView.findViewById(R.id.linearLayoutWhatsApp);
+        final LinearLayout linearLayoutFacebook = dialogView.findViewById(R.id.linearLayoutFacebook);
+        final LinearLayout linearLayoutTwitter = dialogView.findViewById(R.id.linearLayoutTwitter);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();;
 
 
-        buttonCopyLink.setOnClickListener(V->{
+        linearLayoutWhatsApp.setOnClickListener(V->{
+            shareApp();
+        });
 
+        linearLayoutFacebook.setOnClickListener(V->{
+            shareApp();
+        });
+
+        linearLayoutTwitter.setOnClickListener(V->{
+            shareApp();
+        });
+
+        buttonCopyLink.setOnClickListener(V->{
+            copySaveResult.copyClipboard("https://wordloom.org/");
         });
 
         buttonShareNow.setOnClickListener(V->{
-
+            shareApp();
         });
 
         btnClose.setOnClickListener(V->{
@@ -244,6 +263,36 @@ public class SettingFragment extends Fragment {
         dialog.show();
 
     }
+
+
+
+    private void shareApp() {
+        try {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "WordLoom - Your AI-Powered Writing Assistant");
+
+            String shareMessage = "🚀 Discover WordLoom - the ultimate AI-powered writing assistant!\n\n" +
+                    "✨ What makes it special:\n" +
+                    "• AI-powered writing tools for high-quality content\n" +
+                    "• Support for 27+ languages including Arabic\n" +
+                    "• Grammar checker and writing enhancement\n" +
+                    "• AI content detection to identify AI-generated text\n" +
+                    "• Multiple writing modes (casual, formal, academic, creative)\n" +
+                    "• Text summarization and paraphrasing tools\n" +
+                    "• Beautiful, user-friendly interface\n\n" +
+                    "Whether you're writing emails, essays, or creative content, WordLoom has you covered! 📝\n\n" +
+                    "Try it now: https://wordloom.org/";
+
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+            startActivity(Intent.createChooser(shareIntent, "Share WordLoom"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error sharing app", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 
 }

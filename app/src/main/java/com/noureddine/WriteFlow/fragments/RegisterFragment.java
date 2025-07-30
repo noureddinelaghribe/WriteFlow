@@ -3,6 +3,7 @@ package com.noureddine.WriteFlow.fragments;
 import static com.noureddine.WriteFlow.Utils.SubscriptionConstants.FREE_PLAN_NAME;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -145,6 +146,8 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
+        long timeNow = System.currentTimeMillis();
+
         dialogLoading.showLoadingProgressDialog();
 
         // Register new user with Firebase
@@ -154,12 +157,16 @@ public class RegisterFragment extends Fragment {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         dialogLoading.dismissLoadingProgressDialog();
                         if (task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Registration successful! ", Toast.LENGTH_LONG).show();
 
-                            prefs.saveUser(new User(sName,sEmail,auth.getUid(),FREE_PLAN_NAME,0,0,0));
-                            firebaseRepository.saveUser(new User(sName,sEmail,auth.getUid(),FREE_PLAN_NAME,0,0,0));
-                            //((AuthActivity) getActivity()).toHome();
-                            //getActivity().finish();
+                            prefs.saveUser(new User(sName,sEmail,auth.getUid(),FREE_PLAN_NAME,0,0,0,timeNow));
+                            firebaseRepository.saveUser(new User(sName,sEmail,auth.getUid(),FREE_PLAN_NAME,0,0,0,timeNow));
+
+                            Activity activity = getActivity();
+                            if (activity instanceof AuthActivity) {
+                                ((AuthActivity) activity).toHome(); // handles navigation
+                                // don't call activity.finish() unless you know it's needed
+                            }
 
                         } else {
                             // Registration failed

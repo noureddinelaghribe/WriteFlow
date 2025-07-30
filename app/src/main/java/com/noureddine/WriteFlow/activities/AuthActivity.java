@@ -50,10 +50,12 @@ public class AuthActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void toHome(){
-        Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+    public void toHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+        finish(); // optional
     }
+
 
 
 }

@@ -189,28 +189,28 @@ public class ToolTextFragment extends Fragment implements IUnityAdsInitializatio
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                copySaveResult.saveAsFile(output.getText().toString(),"txt");
+                copySaveResult.saveAsFile(output.getText().toString(),"txt", user.getUid());
             }
         });
 
         word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                copySaveResult.saveAsFile(output.getText().toString(),"word");
+                copySaveResult.saveAsFile(output.getText().toString(),"word", user.getUid());
             }
         });
 
         pdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                copySaveResult.saveAsFile(output.getText().toString(),"pdf");
+                copySaveResult.saveAsFile(output.getText().toString(),"pdf", user.getUid());
             }
         });
 
         html.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                copySaveResult.saveAsFile(output.getText().toString(),"html");
+                copySaveResult.saveAsFile(output.getText().toString(),"html", user.getUid());
             }
         });
 

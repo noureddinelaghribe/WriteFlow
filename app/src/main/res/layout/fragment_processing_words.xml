@@ -71,7 +71,7 @@
                         android:orientation="horizontal">
 
                         <Spinner
-                            android:id="@+id/spinner"
+                            android:id="@+id/spinnerLanguage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
@@ -79,7 +79,7 @@
                             android:background="@drawable/bg_plan_selector" />
 
                         <Spinner
-                            android:id="@+id/spinner2"
+                            android:id="@+id/spinnerStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -95,7 +95,7 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/editTextText4"
+                            android:id="@+id/editTextTextKeyWords"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -254,42 +254,52 @@
 
                         <ImageView
                             android:id="@+id/imageViewCopy"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:padding="4dp"
                             android:src="@drawable/copy" />
 
                         <ImageView
                             android:id="@+id/imageViewTxt"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:padding="4dp"
                             android:src="@drawable/txt" />
 
                         <ImageView
                             android:id="@+id/imageViewWord"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:padding="4dp"
                             android:src="@drawable/word" />
 
                         <ImageView
                             android:id="@+id/imageViewPdf"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:padding="4dp"
                             android:src="@drawable/pdf" />
 
                         <ImageView
                             android:id="@+id/imageViewHtml"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_margin="10dp"
                             android:layout_weight="1"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:padding="4dp"
                             android:src="@drawable/html" />
 
                     </LinearLayout>
@@ -312,6 +322,132 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewUploadFile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:src="@drawable/upload"
+                    app:tint="@color/c6" />
+
+                <ImageView
+                    android:id="@+id/imageViewMic"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:src="@drawable/mic"
+                    app:tint="@color/c6" />
+
+                <ImageView
+                    android:id="@+id/imageViewWeb"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:src="@drawable/link_website"
+                    app:tint="@color/c6" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutFileUploaded"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg_button_stroke_c3"
+                    android:padding="4dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/fileIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/pdf"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/closeButton"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/close_circle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/fileName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="name.file"
+                        android:textColor="@color/c6"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/fileIcon" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:visibility="gone"
+                    android:background="@drawable/bg_button_stroke_c3"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:id="@+id/closeButtonLink"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/close_circle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/linkWebsiteOrYoutube"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/linkWebsiteOrYoutube"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="https://wordloom.org"
+                        android:textColor="@color/c6"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/textView20"

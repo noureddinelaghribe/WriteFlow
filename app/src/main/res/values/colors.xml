@@ -11,5 +11,6 @@
     <color name="c6">#FF6F61</color>
     <color name="c7">#00C7FF</color>
     <color name="c8">#C3E09B</color>
+    <color name="transparent">#00000000</color>
 
 </resources>
