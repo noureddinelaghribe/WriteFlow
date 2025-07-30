@@ -6,22 +6,6 @@ import java.util.List;
 
 public class GeminiRequest {
 
-//    private List<Content> contents;
-//
-//    public GeminiRequest(String prompt) {
-//        if (prompt == null) {
-//            prompt = "";  // Handle null case
-//        }
-//
-//        Part part = new Part(prompt);
-//        List<Part> parts = new ArrayList<>();
-//        parts.add(part);
-//
-//        Content content = new Content(parts, "user");
-//        this.contents = new ArrayList<>();
-//        this.contents.add(content);
-//    }
-
 
     private SystemInstruction systemInstruction;
     private List<Content> contents;

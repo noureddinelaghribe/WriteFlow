@@ -1,6 +1,5 @@
 package com.noureddine.WriteFlow.model;
 
-import com.google.gson.annotations.SerializedName;
 
 public class DocxtractResponse {
     private String status;
